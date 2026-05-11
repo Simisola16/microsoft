@@ -113,7 +113,9 @@ export default function BillingBills() {
                 </td>
                 <td>{inv.date}</td>
                 <td>{inv.amount}</td>
-                <td>{inv.status}</td>
+                <td style={{ color: inv.status === 'Deactivate' ? '#a4262c' : 'inherit', fontWeight: inv.status === 'Deactivate' ? '600' : '400' }}>
+                  {inv.status}
+                </td>
                 <td>{inv.pay}</td>
                 <td>
                   <a

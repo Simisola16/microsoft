@@ -9,11 +9,11 @@ const myProducts = [
     assigned: 22,
     purchased: 'Unlimited',
     available: 0,
-    status: 'Active',
+    status: 'Deactivate',
     renewal: '11/03/2034',
     channel: 'Commercial direct',
     type: 'License-based',
-    pricing: 'Paid'
+    pricing: 'Refund in progress'
   },
   // { 
   //   id: 2, 
@@ -174,8 +174,15 @@ export default function BillingProducts() {
                 <td>{product.purchased}</td>
                 <td>{product.available}</td>
                 <td>
-                  <div className="yp-status">
-                    <svg className="yp-status-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <div className="yp-status" style={{ color: product.status === 'Deactivate' ? '#a4262c' : 'inherit' }}>
+                    <svg 
+                      className="yp-status-icon" 
+                      width="14" 
+                      height="14" 
+                      viewBox="0 0 24 24" 
+                      fill="currentColor"
+                      style={{ color: product.status === 'Deactivate' ? '#a4262c' : '#107c10' }}
+                    >
                       <circle cx="12" cy="12" r="10"/>
                       <path d="M9 12l2 2 4-4" fill="none" stroke="white" strokeWidth="2.5"/>
                     </svg>
