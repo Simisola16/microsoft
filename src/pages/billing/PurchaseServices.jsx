@@ -29,7 +29,7 @@ function NonprofitProductCard({ product, onBuy }) {
         <button 
           className="ps-card-details-btn" 
           style={{backgroundColor: '#107c10ff', color: 'white', border: 'none'}}
-          onClick={() => onBuy(product)}
+          // onClick={() => onBuy(product)}
         >
           Active
         </button>
