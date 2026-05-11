@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import API_URL from '../../config';
 import './ContactSupport.css';
 
