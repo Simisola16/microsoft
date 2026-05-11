@@ -18,7 +18,7 @@ export default function ContactSupport() {
   const fetchUserTickets = async () => {
     const auth = JSON.parse(localStorage.getItem('ms_admin_auth'));
     const token = auth?.token;
-    const userEmail = auth?.user?.email;
+    const userEmail = auth?.email;
 
     try {
       const response = await fetch(`${API_URL}/api/tickets`, {
@@ -26,6 +26,7 @@ export default function ContactSupport() {
       });
       
       const data = await response.json();
+      console.log(data);
       
       if (!response.ok) {
         console.error('API Error:', data.message);
@@ -135,6 +136,7 @@ export default function ContactSupport() {
       if (response.ok) {
         fetchUserTickets();
       }
+      
     } catch (err) {
       console.error('Error deleting ticket:', err);
     }
