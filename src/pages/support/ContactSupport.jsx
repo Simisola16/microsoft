@@ -107,6 +107,28 @@ export default function ContactSupport() {
     }
   };
 
+  const handleDeleteTicket = async (ticketId) => {
+    if (!window.confirm('Are you sure you want to delete this support ticket? This action cannot be undone.')) return;
+
+    const auth = JSON.parse(localStorage.getItem('ms_admin_auth'));
+    const token = auth?.token;
+
+    try {
+      const response = await fetch(`${API_URL}/api/tickets/${ticketId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        fetchUserTickets();
+      }
+    } catch (err) {
+      console.error('Error deleting ticket:', err);
+    }
+  };
+
   return (
     <div className="cs-container">
       <div className="cs-breadcrumb">

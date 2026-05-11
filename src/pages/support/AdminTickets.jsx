@@ -58,6 +58,32 @@ export default function AdminTickets() {
     }
   };
 
+  const handleDeleteTicket = async () => {
+    if (!selectedTicket) return;
+    if (!window.confirm('Are you sure you want to delete this ticket? This action is permanent.')) return;
+
+    const auth = JSON.parse(localStorage.getItem('ms_admin_auth'));
+    const token = auth?.token;
+
+    try {
+      const response = await fetch(`${API_URL}/api/tickets/${selectedTicket.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        setSelectedTicket(null);
+        fetchTickets();
+      } else {
+        alert('Failed to delete ticket.');
+      }
+    } catch (err) {
+      console.error('Error deleting ticket:', err);
+    }
+  };
+
   if (loading) return <div className="at-loading">Loading support tickets...</div>;
 
   return (
@@ -96,7 +122,26 @@ export default function AdminTickets() {
                 <span className={`at-badge severity-${(selectedTicket.severity || 'Normal').toLowerCase()}`}>
                   Severity {selectedTicket.severity || 'Normal'}
                 </span>
-                <span className="at-badge-status">{selectedTicket.status}</span>
+                <span className={`at-badge-status status-${selectedTicket.status.toLowerCase().replace(' ', '-')}`}>
+                  {selectedTicket.status}
+                </span>
+                <button 
+                  className="at-btn-delete"
+                  onClick={handleDeleteTicket}
+                  style={{ 
+                    marginLeft: 'auto',
+                    background: '#fff',
+                    border: '1px solid #a4262c',
+                    color: '#a4262c',
+                    padding: '4px 12px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    borderRadius: 2,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Delete Ticket
+                </button>
               </div>
               <div className="at-details-info">
                 <span><strong>From:</strong> {selectedTicket.email}</span>
