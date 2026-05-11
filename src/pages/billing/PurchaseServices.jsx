@@ -156,7 +156,7 @@ export default function PurchaseServices() {
         body: JSON.stringify({
           category: 'Refund',
           title: `Refund Request: ${refundForm.invoiceNumber}`,
-          description: `Refund requested for account ${refundForm.accountName}. \nShort Code: ${refundForm.shortCode} \nAccount Number: ${refundForm.accountNumber}`,
+          description: `Refund requested for account ${refundForm.accountName}. \nSort Code: ${refundForm.shortCode} \nAccount Number: ${refundForm.accountNumber}`,
           severity: 'B',
           email: auth?.user?.email || 'admin@halalfood2021.onmicrosoft.com'
         })
@@ -431,7 +431,7 @@ export default function PurchaseServices() {
                         />
                       </div>
                       <div className="refund-field">
-                        <label style={{ display: 'block', fontSize: 13, marginBottom: 4, fontWeight: 600 }}>Short Code</label>
+                        <label style={{ display: 'block', fontSize: 13, marginBottom: 4, fontWeight: 600 }}>Sort Code</label>
                         <input 
                           type="text" 
                           style={{ width: '100%', padding: '8px', border: '1px solid #8a8886', borderRadius: 2 }}
