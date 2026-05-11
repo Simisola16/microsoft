@@ -119,8 +119,6 @@ export default function BillingBills() {
                   <a
                     href={`${API_URL}/invoice/${inv.pdf}`}
                     download={`Invoice_${inv.id}.pdf`}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     style={{ color: 'var(--ms-blue)', textDecoration: 'none' }}
                   >
                     Download invoice
