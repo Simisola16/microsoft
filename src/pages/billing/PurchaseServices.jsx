@@ -437,7 +437,7 @@ export default function PurchaseServices() {
                           style={{ width: '100%', padding: '8px', border: '1px solid #8a8886', borderRadius: 2 }}
                           value={refundForm.shortCode} 
                           onChange={e => setRefundForm({...refundForm, shortCode: e.target.value})} 
-                          required 
+                          required
                         />
                       </div>
                       <div className="refund-field">
