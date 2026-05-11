@@ -289,9 +289,6 @@ export default function PurchaseServices() {
           </div>
         </div>
       )}
-    </div>
-  );
-}
       {selectedProduct && (
         <div className="purchase-modal-overlay">
           <div className="purchase-modal">
@@ -368,3 +365,6 @@ export default function PurchaseServices() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
