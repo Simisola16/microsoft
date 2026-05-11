@@ -26,7 +26,7 @@ function NonprofitProductCard({ product, onBuy }) {
       <div className="ps-card-desc">{product.desc}</div>
       <div className="ps-card-price">{product.price}</div>
       <div className="ps-card-actions">
-        <button className="ps-card-details-btn" style={{backgroundColor: '#08911f', color: 'white', border: 'none'}}>Active</button>
+        <button className="ps-card-details-btn" style={{backgroundColor: '#910808ff', color: 'white', border: 'none'}}>Deactivated</button>
         {/* <label className="ps-card-compare">
           <input type="checkbox" />
           Compare
