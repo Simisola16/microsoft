@@ -179,7 +179,7 @@ export default function Dashboard() {
             <button className="ess-card-more">···</button>
           </div>
           <div className="apps-stat">
-            <span className="apps-stat-num">19 of 22</span>
+            <span className="apps-stat-num">19 of Unlimited</span>
             <span className="apps-stat-label">licensed users have installed the apps</span>
           </div>
           <p className="apps-updated">Updated on May 9, 2026</p>

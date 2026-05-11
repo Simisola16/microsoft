@@ -478,6 +478,23 @@
   background: #005a9e;
 }
 
+.ps-refund-btn {
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #0078d4;
+  color: #0078d4;
+  border-radius: 2px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.1s;
+}
+
+.ps-refund-btn:hover {
+  background: #0078d4;
+  color: white;
+}
+
 .ps-switch-success {
   background: #dff6dd;
   color: #107c10;
@@ -547,21 +564,35 @@
   gap: 8px;
 }
 
-.ps-btn-confirm {
+.ps-modal-confirm {
   background: var(--ms-blue);
   color: white;
   border: none;
-  padding: 6px 16px;
+  padding: 8px 24px;
   border-radius: 2px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 14px;
+  transition: background 0.1s;
 }
-.ps-btn-cancel {
+
+.ps-modal-confirm:hover {
+  background: #005a9e;
+}
+
+.ps-modal-cancel {
   background: white;
-  border: 1px solid var(--ms-gray-400);
-  padding: 6px 16px;
+  border: 1px solid #8a8886;
+  color: #323130;
+  padding: 8px 24px;
   border-radius: 2px;
   cursor: pointer;
+  font-size: 14px;
+  transition: background 0.1s;
+}
+
+.ps-modal-cancel:hover {
+  background: #f3f2f1;
 }
 
 .ps-loading-wrap {

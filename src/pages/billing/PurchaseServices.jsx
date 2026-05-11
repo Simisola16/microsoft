@@ -10,10 +10,27 @@ function ProductCard({ product, onBuy }) {
       <div className="ps-card-price">{product.price}</div>
       <div className="ps-card-actions">
         <button className="ps-card-details-btn" onClick={() => onBuy(product)}>Buy</button>
-        <label className="ps-card-compare">
+        {/* <label className="ps-card-compare">
           <input type="checkbox" />
           Compare
-        </label>
+        </label> */}
+      </div>
+    </div>
+  );
+}
+
+function NonprofitProductCard({ product, onBuy }) {
+  return (
+    <div className="ps-card">
+      <div className="ps-card-title">{product.title}</div>
+      <div className="ps-card-desc">{product.desc}</div>
+      <div className="ps-card-price">{product.price}</div>
+      <div className="ps-card-actions">
+        <button className="ps-card-details-btn" style={{backgroundColor: '#08911f', color: 'white', border: 'none'}}>Active</button>
+        {/* <label className="ps-card-compare">
+          <input type="checkbox" />
+          Compare
+        </label> */}
       </div>
     </div>
   );
@@ -21,10 +38,20 @@ function ProductCard({ product, onBuy }) {
 
 export default function PurchaseServices() {
   const [activeTab, setActiveTab] = useState('Nonprofit');
+  const [actualAccountType, setActualAccountType] = useState('Nonprofit');
   const [activePill, setActivePill] = useState('Recommended');
   const [showSwitchModal, setShowSwitchModal] = useState(false);
+  const [showRefundModal, setShowRefundModal] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
   const [switchSuccess, setSwitchSuccess] = useState(false);
+  const [refundForm, setRefundForm] = useState({
+    invoiceNumber: '',
+    accountName: '',
+    shortCode: '',
+    accountNumber: ''
+  });
+  const [isSubmittingRefund, setIsSubmittingRefund] = useState(false);
+  const [refundSuccess, setRefundSuccess] = useState(false);
   
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [purchaseQty, setPurchaseQty] = useState(1);
@@ -42,27 +69,36 @@ export default function PurchaseServices() {
     const auth = JSON.parse(localStorage.getItem('ms_admin_auth'));
     const token = auth?.token;
 
+    // Minimum loading time of 3 seconds
+    const timer = new Promise(r => setTimeout(r, 3000));
+
     // Fetch Products
-    fetch(`${API_URL}/api/products`, {
+    const productsFetch = fetch(`${API_URL}/api/products`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(data => {
-        setProducts(data);
+        if (data && (data.smb || data.nonprofit)) {
+          setProducts(data);
+        }
       })
       .catch(err => console.error('Error fetching products:', err));
 
     // Fetch Settings (Account Type)
-    fetch(`${API_URL}/api/settings`, {
+    const settingsFetch = fetch(`${API_URL}/api/settings`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(data => {
-        if (data.accountType) setActiveTab(data.accountType);
-        setLoading(false);
+        if (data.accountType) {
+          setActiveTab(data.accountType);
+          setActualAccountType(data.accountType);
+        }
       })
-      .catch(err => {
-        console.error('Error fetching settings:', err);
+      .catch(err => console.error('Error fetching settings:', err));
+
+    Promise.all([productsFetch, settingsFetch, timer])
+      .finally(() => {
         setLoading(false);
       });
   }, []);
@@ -70,14 +106,14 @@ export default function PurchaseServices() {
   const handleConfirmSwitch = async () => {
     setIsSwitching(true);
     
-    // Simulate long loading
-    await new Promise(r => setTimeout(r, 10000));
+    // Simulate loader
+    await new Promise(r => setTimeout(r, 3000));
 
     const auth = JSON.parse(localStorage.getItem('ms_admin_auth'));
     const token = auth?.token;
 
     try {
-      const targetType = activeTab === 'Nonprofit' ? 'Business' : 'Nonprofit';
+      const targetType = actualAccountType === 'Nonprofit' ? 'Business' : 'Nonprofit';
       const response = await fetch(`${API_URL}/api/settings`, {
         method: 'PATCH',
         headers: {
@@ -91,12 +127,50 @@ export default function PurchaseServices() {
         setIsSwitching(false);
         setSwitchSuccess(true);
         setActiveTab(targetType);
+        setActualAccountType(targetType);
         setShowSwitchModal(false);
         setTimeout(() => setSwitchSuccess(false), 5000);
       }
     } catch (err) {
       console.error('Error switching account type:', err);
       setIsSwitching(false);
+    }
+  };
+
+  const handleRefundSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmittingRefund(true);
+    
+    // 2 second mandatory delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    const auth = JSON.parse(localStorage.getItem('ms_admin_auth'));
+    const token = auth?.token;
+
+    try {
+      const response = await fetch(`${API_URL}/api/tickets`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          category: 'Refund',
+          title: `Refund Request: ${refundForm.invoiceNumber}`,
+          description: `Refund requested for account ${refundForm.accountName}. \nShort Code: ${refundForm.shortCode} \nAccount Number: ${refundForm.accountNumber}`,
+          severity: 'B',
+          email: auth?.user?.email || 'admin@halalfood2021.onmicrosoft.com'
+        })
+      });
+
+      if (response.ok) {
+        setIsSubmittingRefund(false);
+        setRefundSuccess(true);
+        setRefundForm({ invoiceNumber: '', accountName: '', shortCode: '', accountNumber: '' });
+      }
+    } catch (err) {
+      console.error('Error submitting refund:', err);
+      setIsSubmittingRefund(false);
+      alert('Failed to submit refund request.');
     }
   };
 
@@ -125,17 +199,24 @@ export default function PurchaseServices() {
       <div className="ps-billing-account">
         <div className="ps-ba-title">Billing account view</div>
         <div className="ps-ba-details">
-          Products available for: <a href="#" className="ps-ba-link">Halal Food Foundation <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{verticalAlign: '-2px'}}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a> (Copilot Nonprofit Account)
+          Products available for: <a href="#" className="ps-ba-link">Halal Food Foundation <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{verticalAlign: '-2px'}}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a> {actualAccountType === 'Nonprofit' ? '(Copilot Nonprofit account)' : '(Microsoft 365 Business account)'}
         </div>
-        <a href="#" className="ps-ba-link">Change billing account</a>
+        {/* <a href="#" className="ps-ba-link">Change billing account</a> */}
       </div>
 
-      <div style={{ marginBottom: 24 }}>
+      <div style={{ marginBottom: 24, display: 'flex', gap: 12 }}>
         <button 
           className="ps-switch-btn"
           onClick={() => setShowSwitchModal(true)}
         >
-          {activeTab === 'Nonprofit' ? 'Switch to business account' : 'Switch to Nonprofit account'}
+          {/* {actualAccountType === 'Nonprofit' ? 'Switch to Business Account' : 'Switch to Nonprofit Account'} */}
+          {actualAccountType === 'Nonprofit' ? 'Switch to Business Account' : 'Switch to Nonprofit Account'}
+        </button>
+        <button 
+          className="ps-refund-btn"
+          onClick={() => setShowRefundModal(true)}
+        >
+          Request for Refund
         </button>
       </div>
 
@@ -145,7 +226,7 @@ export default function PurchaseServices() {
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
-          Your account has changed to {activeTab === 'Nonprofit' ? 'nonprofit' : 'business'} account
+          Your account has changed to {actualAccountType === 'Nonprofit' ? 'nonprofit' : 'business'} account
         </div>
       )}
 
@@ -207,17 +288,17 @@ export default function PurchaseServices() {
           
           <div className="ps-section-title" style={{marginTop: 48, marginBottom: 24}}>Bestsellers for small &amp; medium businesses</div>
           <div className="ps-grid">
-            {loading ? <p>Loading...</p> : products.smb.map(product => <ProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
+            {loading ? <p>Loading...</p> : products?.smb?.map(product => <ProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
           </div>
 
           <div className="ps-section-title" style={{marginTop: 48, marginBottom: 24}}>Bestsellers for enterprise</div>
           <div className="ps-grid">
-            {loading ? <p>Loading...</p> : products.enterprise.map(product => <ProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
+            {loading ? <p>Loading...</p> : products?.enterprise?.map(product => <ProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
           </div>
 
           <div className="ps-section-title" style={{marginTop: 48, marginBottom: 24}}>Standalone solutions</div>
           <div className="ps-grid">
-            {loading ? <p>Loading...</p> : products.standalone.map(product => <ProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
+            {loading ? <p>Loading...</p> : products?.standalone?.map(product => <ProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
           </div>
         </div>
       )}
@@ -238,12 +319,12 @@ export default function PurchaseServices() {
           
           <div className="ps-section-title" style={{marginTop: 48, marginBottom: 24}}>Remote & hybrid work</div>
           <div className="ps-grid ps-grid-2-col">
-            {loading ? <p>Loading...</p> : products.nonprofit.remoteWork.map(product => <ProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
+            {loading ? <p>Loading...</p> : products?.nonprofit?.remoteWork?.map(product => <NonprofitProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
           </div>
 
           <div className="ps-section-title" style={{marginTop: 48, marginBottom: 24}}>Analytics & process automation</div>
           <div className="ps-grid ps-grid-2-col">
-            {loading ? <p>Loading...</p> : products.nonprofit.analytics.map(product => <ProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
+            {loading ? <p>Loading...</p> : products?.nonprofit?.analytics?.map(product => <NonprofitProductCard key={product.id} product={product} onBuy={setSelectedProduct} />)}
           </div>
         </div>
       )}
@@ -277,7 +358,7 @@ export default function PurchaseServices() {
                   <p>Switching your account type... This may take a few moments.</p>
                 </div>
               ) : (
-                <p>Are you sure you want to change to {activeTab === 'Nonprofit' ? 'business' : 'nonprofit'} account?</p>
+                <p>Are you sure you want to change to {actualAccountType === 'Nonprofit' ? 'business' : 'nonprofit'} account?. All the Microsoft feautures in your account will be suspended.</p>
               )}
             </div>
             {!isSwitching && (
@@ -285,6 +366,100 @@ export default function PurchaseServices() {
                 <button className="ps-modal-cancel" onClick={() => setShowSwitchModal(false)}>Cancel</button>
                 <button className="ps-modal-confirm" onClick={handleConfirmSwitch}>Confirm</button>
               </div>
+            )}
+          </div>
+        </div>
+      )}
+      {showRefundModal && (
+        <div className="ps-modal-overlay">
+          <div className="ps-modal" style={{ maxWidth: 500 }}>
+            <div className="ps-modal-header">
+              <h2>Request for Refund</h2>
+              <button onClick={() => {
+                setShowRefundModal(false);
+                setRefundSuccess(false);
+                setIsSubmittingRefund(false);
+              }}>✕</button>
+            </div>
+            {refundSuccess ? (
+              <div className="ps-modal-body" style={{ textAlign: 'center', padding: '40px 24px' }}>
+                <div className="ps-switch-success" style={{ justifyContent: 'center', marginBottom: 0 }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                  <span style={{ fontSize: 16 }}>Your request has been made, the billing team will be in contact with you shortly.</span>
+                </div>
+                <button 
+                  className="ps-modal-confirm" 
+                  style={{ marginTop: 24 }}
+                  onClick={() => {
+                    setShowRefundModal(false);
+                    setRefundSuccess(false);
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleRefundSubmit}>
+                <div className="ps-modal-body">
+                  {isSubmittingRefund ? (
+                    <div className="ps-loading-wrap" style={{ padding: '40px 0' }}>
+                      <div className="ps-spinner"></div>
+                      <p>Processing your refund request...</p>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                      <div className="refund-field">
+                        <label style={{ display: 'block', fontSize: 13, marginBottom: 4, fontWeight: 600 }}>Invoice Number</label>
+                        <input 
+                          type="text" 
+                          style={{ width: '100%', padding: '8px', border: '1px solid #8a8886', borderRadius: 2 }}
+                          value={refundForm.invoiceNumber} 
+                          onChange={e => setRefundForm({...refundForm, invoiceNumber: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                      <div className="refund-field">
+                        <label style={{ display: 'block', fontSize: 13, marginBottom: 4, fontWeight: 600 }}>Account Name</label>
+                        <input 
+                          type="text" 
+                          style={{ width: '100%', padding: '8px', border: '1px solid #8a8886', borderRadius: 2 }}
+                          value={refundForm.accountName} 
+                          onChange={e => setRefundForm({...refundForm, accountName: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                      <div className="refund-field">
+                        <label style={{ display: 'block', fontSize: 13, marginBottom: 4, fontWeight: 600 }}>Short Code</label>
+                        <input 
+                          type="text" 
+                          style={{ width: '100%', padding: '8px', border: '1px solid #8a8886', borderRadius: 2 }}
+                          value={refundForm.shortCode} 
+                          onChange={e => setRefundForm({...refundForm, shortCode: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                      <div className="refund-field">
+                        <label style={{ display: 'block', fontSize: 13, marginBottom: 4, fontWeight: 600 }}>Account Number</label>
+                        <input 
+                          type="text" 
+                          style={{ width: '100%', padding: '8px', border: '1px solid #8a8886', borderRadius: 2 }}
+                          value={refundForm.accountNumber} 
+                          onChange={e => setRefundForm({...refundForm, accountNumber: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {!isSubmittingRefund && (
+                  <div className="ps-modal-footer">
+                    <button type="button" className="ps-modal-cancel" onClick={() => setShowRefundModal(false)}>Cancel</button>
+                    <button type="submit" className="ps-modal-confirm">Submit Request</button>
+                  </div>
+                )}
+              </form>
             )}
           </div>
         </div>
@@ -311,11 +486,11 @@ export default function PurchaseServices() {
             
             <div className="pm-body">
               <div className="pm-desc">{selectedProduct.desc}</div>
-              <div className="pm-info-banner">
+              {/* <div className="pm-info-banner">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                 This product doesn't include apps that you can download. If you need desktop apps, consider buying <a href="#" style={{color: '#0078d4', textDecoration: 'none'}}>Microsoft 365 Business Standard</a> or <a href="#" style={{color: '#0078d4', textDecoration: 'none'}}>Microsoft 365 Business Premium</a>.
                 <button style={{marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: 18}}>✕</button>
-              </div>
+              </div> */}
 
               <div className="pm-grid">
                 <div>
@@ -335,14 +510,18 @@ export default function PurchaseServices() {
                     <div className="pm-radio-item" onClick={() => setBillingFreq('monthly')}>
                       <div className={`pm-radio-circle ${billingFreq === 'monthly' ? 'active' : ''}`}></div>
                       <div className="pm-radio-text">
-                        <span className="pm-radio-label">£4.60 license/month</span>
+                        <span className="pm-radio-label">
+                          {selectedProduct.price.startsWith('Free') ? 'Free' : `£${(parseFloat(selectedProduct.price.match(/[\d.]+/)?.[0]) || 0).toFixed(2)}`} license/month
+                        </span>
                         <span className="pm-radio-subtext">Pay monthly, annual commitment</span>
                       </div>
                     </div>
                     <div className="pm-radio-item" onClick={() => setBillingFreq('yearly')}>
                       <div className={`pm-radio-circle ${billingFreq === 'yearly' ? 'active' : ''}`}></div>
                       <div className="pm-radio-text">
-                        <span className="pm-radio-label">£55.20 license/year</span>
+                        <span className="pm-radio-label">
+                          {selectedProduct.price.startsWith('Free') ? 'Free' : `£${((parseFloat(selectedProduct.price.match(/[\d.]+/)?.[0]) || 0) * 12).toFixed(2)}`} license/year
+                        </span>
                         <span className="pm-radio-subtext">Pay yearly, annual commitment</span>
                       </div>
                     </div>
@@ -351,7 +530,11 @@ export default function PurchaseServices() {
 
                 <div>
                   <div className="pm-section-title">Subtotal before applicable taxes</div>
-                  <div className="pm-subtotal-val">£{(purchaseQty * 4.60).toFixed(2)}</div>
+                  <div className="pm-subtotal-val">
+                    {selectedProduct.price.startsWith('Free') ? 'Free' : 
+                      `£${(purchaseQty * (parseFloat(selectedProduct.price.match(/[\d.]+/)?.[0]) || 0) * (billingFreq === 'yearly' ? 12 : 1)).toFixed(2)}`
+                    }
+                  </div>
                   <div style={{display: 'flex', alignItems: 'center'}}>
                     <button className="pm-buy-btn">Buy</button>
                     <a href="#" className="pm-trial-link">

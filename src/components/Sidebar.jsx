@@ -104,8 +104,8 @@ const navItems = [
       { id: 'billing-accounts', label: 'Billing accounts', path: '/billing/accounts' },
       { id: 'payment-methods', label: 'Payment methods', path: '/billing/payment' },
       { id: 'billing-notifications', label: 'Billing notifications', path: '/billing/notifications' },
-      { id: 'pay-as-you-go', label: 'Pay-as-you-go', path: '/billing/pay-as-you-go' },
-      { id: 'cost-management', label: 'Cost Management', path: '/billing/cost' },
+      // { id: 'pay-as-you-go', label: 'Pay-as-you-go', path: '/billing/pay-as-you-go' },
+      // { id: 'cost-management', label: 'Cost Management', path: '/billing/cost' },
     ]
   },
   {
@@ -159,7 +159,12 @@ const navItems = [
 export default function Sidebar({ collapsed, onToggle }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [expandedItems, setExpandedItems] = useState({ users: true, billing: false });
+  const [expandedItems, setExpandedItems] = useState({ users: true, billing: false, 'teams-groups': true });
+
+  const disabledIds = [
+    'contacts', 'guest-users', 'deleted-users', 
+    'policies', 'deleted-groups', 'shared-mailboxes'
+  ];
 
   const toggleExpand = (id) => {
     setExpandedItems(prev => ({ ...prev, [id]: !prev[id] }));
@@ -226,8 +231,12 @@ export default function Sidebar({ collapsed, onToggle }) {
                 {item.children.map(child => (
                   <button
                     key={child.id}
-                    className={`nav-child-item ${isActivePath(child.path) ? 'active' : ''}`}
-                    onClick={() => navigate(child.path)}
+                    className={`nav-child-item ${isActivePath(child.path) ? 'active' : ''} ${disabledIds.includes(child.id) ? 'disabled' : ''}`}
+                    onClick={() => {
+                      if (!disabledIds.includes(child.id)) {
+                        navigate(child.path);
+                      }
+                    }}
                   >
                     {child.label}
                   </button>

@@ -21,6 +21,8 @@ import ContactSupport from './pages/support/ContactSupport';
 import PlaceholderPage from './components/PlaceholderPage';
 import LoadingScreen from './components/LoadingScreen';
 
+import AdminTickets from './pages/support/AdminTickets';
+
 function ProtectedRoute({ children }) {
   const auth = localStorage.getItem('ms_admin_auth');
   if (!auth) return <Navigate to="/login" replace />;
@@ -36,7 +38,7 @@ function AppContent() {
     setLoading(true);
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 5000); // 5 seconds
+    }, 3000); // 3 seconds
 
     return () => clearTimeout(timer);
   }, [location.pathname]);
@@ -117,6 +119,9 @@ function AppContent() {
         <Route path="admin-centers/compliance" element={<PlaceholderPage title="Microsoft Purview" subtitle="Compliance, data governance, and eDiscovery" icon="⚖️" />} />
         <Route path="admin-centers/entra" element={<PlaceholderPage title="Microsoft Entra" subtitle="Identity and access management" icon="🔐" />} />
         <Route path="admin-centers/intune" element={<PlaceholderPage title="Microsoft Intune" subtitle="Device and application management" icon="📱" />} />
+
+        {/* Admin only (Not in sidebar) */}
+        <Route path="admin/tickets" element={<AdminTickets />} />
 
         {/* Profile */}
         <Route path="profile" element={<PlaceholderPage title="My account" subtitle="Manage your account settings and preferences" icon="👤" />} />

@@ -15,15 +15,31 @@ export default function ContactSupport() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.description || !formData.email) return;
-    
-    // Simulate API call
-    setTimeout(() => {
-      setSubmitted(true);
-      window.scrollTo(0,0);
-    }, 500);
+
+    const auth = JSON.parse(localStorage.getItem('ms_admin_auth'));
+    const token = auth?.token;
+
+    try {
+      const response = await fetch(`${API_URL}/api/tickets`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        window.scrollTo(0, 0);
+      }
+    } catch (err) {
+      console.error('Error submitting ticket:', err);
+      alert('Failed to submit ticket. Please try again.');
+    }
   };
 
   return (
