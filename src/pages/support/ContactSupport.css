@@ -192,6 +192,7 @@
   color: var(--ms-gray-800);
   line-height: 1.4;
   margin-bottom: 16px;
+  white-space: pre-wrap;
 }
 
 .cs-ticket-replies {
@@ -242,6 +243,7 @@
   font-size: 14px;
   color: var(--ms-gray-900);
   line-height: 1.4;
+  white-space: pre-wrap;
 }
 
 .cs-reply-item.support {
