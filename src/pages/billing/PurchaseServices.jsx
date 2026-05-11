@@ -516,7 +516,7 @@ export default function PurchaseServices() {
                         <span className="pm-radio-subtext">Pay monthly, annual commitment</span>
                       </div>
                     </div>
-                    <div className="pm-radio-item" onClick={() => setBillingFreq('yearly')}>
+                    {/* <div className="pm-radio-item" onClick={() => setBillingFreq('yearly')}>
                       <div className={`pm-radio-circle ${billingFreq === 'yearly' ? 'active' : ''}`}></div>
                       <div className="pm-radio-text">
                         <span className="pm-radio-label">
@@ -524,7 +524,7 @@ export default function PurchaseServices() {
                         </span>
                         <span className="pm-radio-subtext">Pay yearly, annual commitment</span>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
