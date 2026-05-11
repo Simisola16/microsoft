@@ -1,0 +1,70 @@
+.billing-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.billing-product-card {
+  max-width: 900px;
+}
+
+.billing-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.billing-product-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ms-gray-900);
+  margin-bottom: 2px;
+}
+
+.billing-product-type {
+  font-size: 12px;
+  color: var(--ms-gray-600);
+}
+
+.billing-card-stats {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.billing-stat-val {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ms-gray-900);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.billing-stat-total {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--ms-gray-500);
+}
+
+.billing-stat-label {
+  font-size: 12px;
+  color: var(--ms-gray-600);
+  margin-bottom: 6px;
+}
+
+.license-bar {
+  height: 6px;
+  background: var(--ms-gray-200);
+  border-radius: 3px;
+  overflow: hidden;
+  max-width: 200px;
+}
+
+.license-bar-fill {
+  height: 100%;
+  background: var(--ms-blue);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}

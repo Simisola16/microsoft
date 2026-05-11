@@ -1,0 +1,130 @@
+.ba-container {
+  padding: 24px;
+  background: var(--ms-white);
+  min-height: 100%;
+}
+
+.ba-breadcrumb {
+  font-size: 13px;
+  color: var(--ms-gray-600);
+  margin-bottom: 24px;
+}
+.ba-breadcrumb span {
+  color: var(--ms-gray-800);
+}
+
+.ba-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.ba-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ms-gray-900);
+}
+
+.ba-learn-more {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--ms-gray-800);
+  text-decoration: none;
+}
+.ba-learn-more svg {
+  color: var(--ms-blue);
+}
+.ba-learn-more:hover {
+  text-decoration: underline;
+}
+
+.ba-tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--ms-gray-300);
+  margin-bottom: 32px;
+}
+.ba-tab {
+  font-size: 14px;
+  color: var(--ms-gray-700);
+  padding-bottom: 8px;
+  cursor: pointer;
+}
+.ba-tab.active {
+  font-weight: 600;
+  color: var(--ms-gray-900);
+  border-bottom: 2px solid var(--ms-blue);
+}
+
+.ba-intro {
+  font-size: 14px;
+  color: var(--ms-gray-800);
+  line-height: 1.5;
+  margin-bottom: 32px;
+  max-width: 900px;
+}
+.ba-intro a {
+  color: var(--ms-blue);
+  text-decoration: none;
+}
+.ba-intro a:hover {
+  text-decoration: underline;
+}
+
+.ba-action-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ms-gray-300);
+  margin-bottom: 24px;
+}
+.ba-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--ms-gray-900);
+  font-size: 14px;
+  cursor: pointer;
+}
+.ba-btn svg {
+  color: var(--ms-blue);
+}
+.ba-btn:hover {
+  text-decoration: underline;
+}
+
+.ba-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+.ba-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.ba-table th {
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ms-gray-700);
+  border-bottom: 1px solid var(--ms-gray-200);
+}
+.ba-table td {
+  padding: 16px 16px;
+  font-size: 13px;
+  color: var(--ms-gray-900);
+  border-bottom: 1px solid var(--ms-gray-200);
+  vertical-align: middle;
+}
+
+.ba-account-name {
+  font-weight: 600;
+  color: var(--ms-gray-900);
+}

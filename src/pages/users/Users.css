@@ -1,0 +1,61 @@
+.user-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ms-blue);
+  font-size: 13px;
+  font-family: var(--font-family);
+  padding: 0;
+  text-align: left;
+}
+
+.user-link:hover { text-decoration: underline; }
+
+.filter-group {
+  display: flex;
+  border: 1px solid var(--ms-gray-300);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.filter-btn {
+  padding: 5px 12px;
+  font-size: 13px;
+  background: var(--ms-white);
+  border: none;
+  border-right: 1px solid var(--ms-gray-300);
+  cursor: pointer;
+  color: var(--ms-gray-700);
+  font-family: var(--font-family);
+  transition: background 0.1s;
+}
+
+.filter-btn:last-child { border-right: none; }
+.filter-btn:hover { background: var(--ms-gray-100); }
+.filter-btn.active { background: var(--ms-blue-lighter); color: var(--ms-blue); font-weight: 600; }
+
+.selection-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--ms-blue-lighter);
+  border: 1px solid var(--ms-blue-light);
+  border-radius: 2px;
+  font-size: 13px;
+  color: var(--ms-gray-800);
+  font-weight: 500;
+}
+
+.table-empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--ms-gray-600);
+  font-size: 14px;
+}

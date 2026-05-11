@@ -1,0 +1,172 @@
+.active-users-page {
+  padding: 24px;
+  background: var(--ms-white);
+  min-height: 100%;
+}
+
+.au-breadcrumb {
+  font-size: 13px;
+  color: var(--ms-gray-600);
+  margin-bottom: 24px;
+}
+.au-breadcrumb span {
+  color: var(--ms-gray-800);
+}
+
+.au-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ms-gray-900);
+  margin-bottom: 24px;
+}
+
+.au-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ms-gray-300);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.au-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--ms-gray-900);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.au-btn svg {
+  color: var(--ms-blue);
+}
+.au-btn:hover {
+  text-decoration: underline;
+}
+
+.au-search-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--ms-gray-400);
+  border-radius: 2px;
+  padding: 4px 8px;
+  width: 240px;
+  margin-left: auto;
+}
+.au-search-box svg {
+  color: var(--ms-blue);
+  margin-right: 8px;
+}
+.au-search-box input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+}
+.au-search-box input::placeholder {
+  color: var(--ms-gray-600);
+}
+
+.au-more-btn {
+  background: none;
+  border: none;
+  color: var(--ms-gray-800);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 8px;
+}
+
+.au-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.au-filter-text {
+  font-size: 14px;
+  color: var(--ms-gray-800);
+}
+.au-filter-dropdown {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ms-gray-900);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  margin-right: 16px;
+}
+
+.au-filter-pill {
+  border: 1px solid var(--ms-gray-400);
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 13px;
+  color: var(--ms-gray-900);
+  background: var(--ms-white);
+  cursor: pointer;
+}
+.au-filter-pill:hover {
+  background: var(--ms-gray-100);
+}
+
+.au-table-container {
+  width: 100%;
+}
+
+.au-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.au-table th {
+  padding: 12px 8px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ms-gray-700);
+  border-bottom: 1px solid var(--ms-gray-200);
+}
+
+.au-table td {
+  padding: 12px 8px;
+  font-size: 13px;
+  color: var(--ms-gray-900);
+  border-bottom: 1px solid var(--ms-gray-200);
+  vertical-align: middle;
+}
+
+.au-table-checkbox {
+  width: 40px;
+  text-align: center;
+}
+
+.au-display-name {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.au-dots {
+  color: var(--ms-gray-600);
+  cursor: pointer;
+  padding: 0 8px;
+  opacity: 0;
+}
+.au-table tr:hover .au-dots {
+  opacity: 1;
+}
+
+.au-choose-cols {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+  cursor: pointer;
+}

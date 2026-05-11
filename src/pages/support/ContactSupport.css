@@ -1,0 +1,138 @@
+.cs-container {
+  padding: 24px;
+  background: var(--ms-white);
+  min-height: 100%;
+  max-width: 800px;
+}
+
+.cs-breadcrumb {
+  font-size: 13px;
+  color: var(--ms-gray-600);
+  margin-bottom: 24px;
+}
+.cs-breadcrumb span {
+  color: var(--ms-gray-800);
+}
+
+.cs-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ms-gray-900);
+  margin-bottom: 8px;
+}
+
+.cs-subtitle {
+  font-size: 14px;
+  color: var(--ms-gray-800);
+  margin-bottom: 32px;
+}
+
+.cs-card {
+  border: 1px solid var(--ms-gray-300);
+  border-radius: 2px;
+  padding: 24px;
+  background: var(--ms-white);
+  box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,0.132), 0 0.3px 0.9px 0 rgba(0,0,0,0.108);
+}
+
+.cs-form-group {
+  margin-bottom: 20px;
+}
+
+.cs-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ms-gray-900);
+  margin-bottom: 8px;
+}
+.cs-label span {
+  color: #a4262c; /* MS Red for required */
+  margin-left: 4px;
+}
+
+.cs-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--ms-gray-400);
+  border-radius: 2px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ms-gray-900);
+}
+.cs-input:focus {
+  outline: none;
+  border-color: var(--ms-blue);
+}
+
+.cs-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--ms-gray-400);
+  border-radius: 2px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ms-gray-900);
+  resize: vertical;
+  min-height: 120px;
+}
+.cs-textarea:focus {
+  outline: none;
+  border-color: var(--ms-blue);
+}
+
+.cs-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--ms-gray-400);
+  border-radius: 2px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ms-gray-900);
+  background: var(--ms-white);
+}
+
+.cs-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.cs-btn-submit {
+  background: var(--ms-blue);
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.cs-btn-submit:hover {
+  background: #005a9e;
+}
+
+.cs-btn-cancel {
+  background: var(--ms-white);
+  color: var(--ms-gray-900);
+  border: 1px solid var(--ms-gray-400);
+  padding: 8px 24px;
+  font-size: 14px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.cs-btn-cancel:hover {
+  background: var(--ms-gray-100);
+}
+
+.cs-success-msg {
+  background: #dff6dd;
+  border-left: 4px solid #107c10;
+  padding: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #107c10;
+  font-weight: 600;
+}

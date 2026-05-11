@@ -1,0 +1,169 @@
+.bills-container {
+  padding: 24px;
+  background: var(--ms-white);
+  min-height: 100%;
+}
+
+.bills-breadcrumb {
+  font-size: 13px;
+  color: var(--ms-gray-600);
+  margin-bottom: 24px;
+}
+.bills-breadcrumb span {
+  color: var(--ms-gray-800);
+}
+
+.bills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.bills-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ms-gray-900);
+}
+
+.bills-learn-more {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--ms-gray-800);
+  text-decoration: none;
+}
+.bills-learn-more svg {
+  color: var(--ms-blue);
+}
+.bills-learn-more:hover {
+  text-decoration: underline;
+}
+
+.bills-tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--ms-gray-300);
+  margin-bottom: 32px;
+}
+.bills-tab {
+  font-size: 16px;
+  color: var(--ms-gray-700);
+  padding-bottom: 8px;
+  cursor: pointer;
+}
+.bills-tab.active {
+  font-weight: 600;
+  color: var(--ms-gray-900);
+  border-bottom: 2px solid var(--ms-blue);
+}
+
+.bills-intro {
+  font-size: 14px;
+  color: var(--ms-gray-800);
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+.bills-intro a {
+  color: var(--ms-blue);
+  text-decoration: none;
+}
+.bills-intro a:hover {
+  text-decoration: underline;
+}
+
+.bills-account {
+  margin-bottom: 32px;
+}
+.bills-acc-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ms-gray-900);
+  margin-bottom: 8px;
+}
+.bills-acc-details {
+  font-size: 14px;
+  color: var(--ms-gray-800);
+  margin-bottom: 4px;
+}
+.bills-acc-link {
+  color: var(--ms-blue);
+  text-decoration: none;
+}
+.bills-acc-link:hover {
+  text-decoration: underline;
+}
+
+.bills-action-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ms-gray-300);
+  margin-bottom: 24px;
+}
+.bills-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--ms-gray-900);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.bills-btn svg {
+  color: var(--ms-blue);
+}
+.bills-btn:hover {
+  text-decoration: underline;
+}
+.bills-icon-btn {
+  background: none;
+  border: none;
+  color: var(--ms-blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bills-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+.bills-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.bills-table th {
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ms-gray-700);
+  border-bottom: 1px solid var(--ms-gray-200);
+  white-space: nowrap;
+}
+.bills-table td {
+  padding: 16px 16px;
+  font-size: 13px;
+  color: var(--ms-gray-900);
+  border-bottom: 1px solid var(--ms-gray-200);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.bills-id-col {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+.bills-dots {
+  color: var(--ms-gray-600);
+  cursor: pointer;
+}
