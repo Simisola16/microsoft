@@ -1,6 +1,17 @@
+import { useEffect } from 'react';
 import './LoadingScreen.css';
 
 export default function LoadingScreen() {
+  useEffect(() => {
+    // Disable scrolling
+    document.body.style.overflow = 'hidden';
+    
+    // Re-enable scrolling on unmount
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
   return (
     <div className="global-loader-overlay">
       <div className="loader-content">

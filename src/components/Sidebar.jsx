@@ -163,7 +163,7 @@ export default function Sidebar({ collapsed, onToggle }) {
 
   const disabledIds = [
     'contacts', 'guest-users', 'deleted-users', 
-    'policies', 'deleted-groups', 'shared-mailboxes'
+    'policies', 'deleted-groups', 'shared-mailboxes', 'payment-methods', 'billing-notifications'
   ];
 
   const toggleExpand = (id) => {

@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import API_URL from '../../config';
 import './ContactSupport.css';
 
 export default function ContactSupport() {
-  const [submitted, setSubmitted] = useState(false);
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -10,6 +12,33 @@ export default function ContactSupport() {
     email: 'lekan@halalfood2021.onmicrosoft.com',
     phone: ''
   });
+
+  const fetchUserTickets = async () => {
+    const auth = JSON.parse(localStorage.getItem('ms_admin_auth'));
+    const token = auth?.token;
+    const userEmail = auth?.user?.email;
+
+    try {
+      const response = await fetch(`${API_URL}/api/tickets`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+      // Filter by user email if not support admin
+      if (userEmail !== 'supportadmin@halalfood2021.onmicrosoft.com') {
+        setTickets(data.filter(t => t.email === userEmail || t.email === 'lekan@halalfood2021.onmicrosoft.com'));
+      } else {
+        setTickets(data);
+      }
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching tickets:', err);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserTickets();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -34,6 +63,14 @@ export default function ContactSupport() {
 
       if (response.ok) {
         setSubmitted(true);
+        fetchUserTickets();
+        setFormData({
+          title: '',
+          description: '',
+          severity: 'C',
+          email: 'lekan@halalfood2021.onmicrosoft.com',
+          phone: ''
+        });
         window.scrollTo(0, 0);
       }
     } catch (err) {
@@ -129,6 +166,44 @@ export default function ContactSupport() {
           </form>
         </div>
       )}
+
+      <div className="cs-tickets-section" style={{marginTop: 48}}>
+        <h2 className="cs-section-title" style={{fontSize: 18, marginBottom: 16}}>Your recent support tickets</h2>
+        {loading ? (
+          <p>Loading your tickets...</p>
+        ) : tickets.length === 0 ? (
+          <p className="cs-no-tickets">You haven't submitted any tickets yet.</p>
+        ) : (
+          <div className="cs-ticket-list">
+            {tickets.map(ticket => (
+              <div key={ticket.id} className="cs-ticket-card">
+                <div className="cs-ticket-header">
+                  <div className="cs-ticket-title">{ticket.title}</div>
+                  <span className={`cs-status-badge status-${ticket.status.toLowerCase().replace(' ', '-')}`}>
+                    {ticket.status}
+                  </span>
+                </div>
+                <div className="cs-ticket-info">
+                  <span>ID: #{ticket.id}</span>
+                  <span>•</span>
+                  <span>{new Date(ticket.createdAt).toLocaleDateString()}</span>
+                  <span>•</span>
+                  <span>Severity {ticket.severity}</span>
+                </div>
+                <div className="cs-ticket-desc">{ticket.description}</div>
+                {ticket.replies && ticket.replies.length > 0 && (
+                  <div className="cs-ticket-replies">
+                    <div className="cs-replies-count">{ticket.replies.length} {ticket.replies.length === 1 ? 'reply' : 'replies'} from support</div>
+                    <div className="cs-latest-reply">
+                      <strong>Latest:</strong> {ticket.replies[ticket.replies.length - 1].message}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

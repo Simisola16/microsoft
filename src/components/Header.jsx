@@ -170,9 +170,9 @@ export default function Header({ user, onToggleSidebar, sidebarCollapsed }) {
             className="header-avatar-btn"
             onClick={() => { setShowUserMenu(!showUserMenu); setShowNotifications(false); }}
           >
-            <div className="ms-avatar" style={{ background: '#7a7574', border: '1px solid rgba(255,255,255,0.2)' }}>
-              TO
-            </div>
+              <div className="ms-avatar" style={{ background: '#7a7574', border: '1px solid rgba(255,255,255,0.2)' }}>
+                {user.name ? user?.name?.split(' ').map(n => n[0]).join('') : 'TO'}
+              </div>
           </button>
           {showUserMenu && (
             <div className="header-dropdown user-dropdown">
@@ -183,11 +183,11 @@ export default function Header({ user, onToggleSidebar, sidebarCollapsed }) {
               
               <div className="user-dropdown-body">
                 <div className="user-profile-circle">
-                  TO
+                  {user.name ? user?.name?.split(' ').map(n => n[0]).join('') : 'TO'}
                 </div>
                 <div className="user-details-main">
-                  <div className="user-details-name">Taoheed Ogundapo</div>
-                  <div className="user-details-email">ict@halalfood2021.onmicroso...</div>
+                  <div className="user-details-name">{user?.name}</div>
+                  <div className="user-details-email">{user?.email}</div>
                   
                   <div className="user-details-links">
                     <a href="#" className="user-link-item">View account</a>
@@ -199,8 +199,22 @@ export default function Header({ user, onToggleSidebar, sidebarCollapsed }) {
                 </div>
               </div>
 
+              {user?.email === 'supportadmin@halalfood2021.onmicrosoft.com' && (
+                <div style={{ padding: '8px 24px', borderTop: '1px solid #edebe9', borderBottom: '1px solid #edebe9' }}>
+                  <button 
+                    onClick={() => { navigate('/admin/tickets'); setShowUserMenu(false); }}
+                    style={{ color: '#0078d4', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left', padding: '8px 0' }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Admin Ticket Support
+                  </button>
+                </div>
+              )}
+
               <div className="user-dropdown-footer">
-                <button className="user-footer-btn">
+                <button onClick={handleLogout} className="user-footer-btn">
                   <div className="footer-icon-circle">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>

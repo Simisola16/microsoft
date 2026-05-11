@@ -136,3 +136,77 @@
   color: #107c10;
   font-weight: 600;
 }
+
+.cs-ticket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cs-ticket-card {
+  background: white;
+  border: 1px solid var(--ms-gray-300);
+  padding: 16px;
+  border-radius: 2px;
+  transition: box-shadow 0.2s;
+}
+
+.cs-ticket-card:hover {
+  box-shadow: 0 1.6px 3.6px rgba(0,0,0,0.1);
+}
+
+.cs-ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.cs-ticket-title {
+  font-weight: 600;
+  color: var(--ms-gray-900);
+  font-size: 15px;
+}
+
+.cs-status-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-open { background: #fde7e9; color: #a4262c; }
+.status-in-progress { background: #fff4ce; color: #856404; }
+.status-closed { background: #dff6dd; color: #107c10; }
+
+.cs-ticket-info {
+  font-size: 12px;
+  color: var(--ms-gray-600);
+  margin-bottom: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.cs-ticket-desc {
+  font-size: 14px;
+  color: var(--ms-gray-800);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.cs-ticket-replies {
+  background: var(--ms-gray-100);
+  padding: 12px;
+  border-radius: 2px;
+  font-size: 13px;
+}
+
+.cs-replies-count {
+  font-weight: 600;
+  color: var(--ms-gray-700);
+  margin-bottom: 6px;
+}
+
+.cs-latest-reply {
+  color: var(--ms-gray-900);
+}
