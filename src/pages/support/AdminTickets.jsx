@@ -75,8 +75,8 @@ export default function AdminTickets() {
               onClick={() => setSelectedTicket(ticket)}
             >
               <div className="at-item-header">
-                <span className={`at-severity severity-${ticket.severity.toLowerCase()}`}>
-                  {ticket.severity}
+                <span className={`at-severity severity-${(ticket.severity || 'Normal').toLowerCase()}`}>
+                  {ticket.severity || 'Normal'}
                 </span>
                 <span className="at-item-status">{ticket.status}</span>
               </div>
@@ -93,8 +93,8 @@ export default function AdminTickets() {
             <div className="at-details-header">
               <div className="at-details-title-wrap">
                 <h1>{selectedTicket.title}</h1>
-                <span className={`at-badge severity-${selectedTicket.severity.toLowerCase()}`}>
-                  Severity {selectedTicket.severity}
+                <span className={`at-badge severity-${(selectedTicket.severity || 'Normal').toLowerCase()}`}>
+                  Severity {selectedTicket.severity || 'Normal'}
                 </span>
                 <span className="at-badge-status">{selectedTicket.status}</span>
               </div>

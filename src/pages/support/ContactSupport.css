@@ -210,3 +210,80 @@
 .cs-latest-reply {
   color: var(--ms-gray-900);
 }
+
+.cs-replies-header {
+  font-weight: 600;
+  color: var(--ms-gray-700);
+  margin-bottom: 12px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cs-reply-item {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ms-gray-200);
+}
+
+.cs-reply-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.cs-reply-meta {
+  font-size: 12px;
+  color: var(--ms-gray-600);
+  margin-bottom: 4px;
+}
+
+.cs-reply-text {
+  font-size: 14px;
+  color: var(--ms-gray-900);
+  line-height: 1.4;
+}
+
+.cs-reply-item.support {
+  border-left: 3px solid var(--ms-blue);
+  padding-left: 12px;
+}
+
+.cs-user-reply-form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cs-user-reply-form .cs-reply-input {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px 12px;
+  border: 1px solid var(--ms-gray-300);
+  border-radius: 2px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.cs-user-reply-form .cs-reply-input:focus {
+  outline: none;
+  border-color: var(--ms-blue);
+}
+
+.cs-reply-send-btn {
+  align-self: flex-end;
+  background: var(--ms-blue);
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.cs-reply-send-btn:hover {
+  background: var(--ms-blue-dark);
+}
