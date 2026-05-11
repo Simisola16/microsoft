@@ -192,7 +192,21 @@ export default function BillingProducts() {
                 <td>{product.renewal}</td>
                 <td>{product.channel}</td>
                 <td>{product.type}</td>
-                <td>{product.pricing}</td>
+                <td>
+                  {product.pricing === 'Refund in progress' ? (
+                    <span style={{ 
+                      backgroundColor: '#fff4ce', 
+                      color: '#323130', 
+                      padding: '4px 8px', 
+                      borderRadius: '2px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      border: '1px solid #fde789'
+                    }}>
+                      {product.pricing}
+                    </span>
+                  ) : product.pricing}
+                </td>
               </tr>
             ))}
           </tbody>
