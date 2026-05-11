@@ -24,12 +24,23 @@ export default function ContactSupport() {
       const response = await fetch(`${API_URL}/api/tickets`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      
       const data = await response.json();
+      
+      if (!response.ok) {
+        console.error('API Error:', data.message);
+        setTickets([]);
+        setLoading(false);
+        return;
+      }
+
       // Filter by user email if not support admin
       if (userEmail !== 'supportadmin@halalfood2021.onmicrosoft.com') {
-        setTickets(data.filter(t => t.email === userEmail || t.email === 'lekan@halalfood2021.onmicrosoft.com'));
+        // Ensure data is an array before filtering
+        const ticketArray = Array.isArray(data) ? data : [];
+        setTickets(ticketArray.filter(t => t.email === userEmail || t.email === 'lekan@halalfood2021.onmicrosoft.com'));
       } else {
-        setTickets(data);
+        setTickets(Array.isArray(data) ? data : []);
       }
       setLoading(false);
     } catch (err) {

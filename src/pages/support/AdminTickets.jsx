@@ -17,7 +17,12 @@ export default function AdminTickets() {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
-      setTickets(data);
+      if (!response.ok) {
+        setTickets([]);
+        setLoading(false);
+        return;
+      }
+      setTickets(Array.isArray(data) ? data : []);
       setLoading(false);
     } catch (err) {
       console.error('Error fetching tickets:', err);

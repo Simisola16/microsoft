@@ -265,6 +265,9 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+          <div className="ess-card-footer" style={{ marginTop: '24px' }}>
+            <button className="btn-primary" onClick={() => navigate('/support/contact')}>Contact support</button>
+          </div>
         </div>
       </div>
       
