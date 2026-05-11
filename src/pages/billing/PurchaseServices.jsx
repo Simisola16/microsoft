@@ -26,7 +26,13 @@ function NonprofitProductCard({ product, onBuy }) {
       <div className="ps-card-desc">{product.desc}</div>
       <div className="ps-card-price">{product.price}</div>
       <div className="ps-card-actions">
-        <button className="ps-card-details-btn" style={{backgroundColor: '#910808ff', color: 'white', border: 'none'}}>Deactivated</button>
+        <button 
+          className="ps-card-details-btn" 
+          style={{backgroundColor: '#107c10ff', color: 'white', border: 'none'}}
+          onClick={() => onBuy(product)}
+        >
+          Active
+        </button>
         {/* <label className="ps-card-compare">
           <input type="checkbox" />
           Compare
@@ -56,6 +62,20 @@ export default function PurchaseServices() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [purchaseQty, setPurchaseQty] = useState(1);
   const [billingFreq, setBillingFreq] = useState('monthly');
+  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+  const [checkoutStep, setCheckoutStep] = useState('selection'); // 'selection' | 'details'
+  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' | 'bank'
+  const [checkoutData, setCheckoutData] = useState({
+    invoiceNumber: '',
+    cardName: '',
+    cardNumber: '',
+    expiry: '',
+    cvv: '',
+    bankName: '',
+    sortCode: '',
+    accountNumber: ''
+  });
 
   const [products, setProducts] = useState({
     smb: [],
@@ -173,6 +193,26 @@ export default function PurchaseServices() {
       alert('Failed to submit refund request.');
     }
   };
+  
+  const handleBuy = async () => {
+    if (checkoutStep === 'selection') {
+      setCheckoutStep('details');
+      return;
+    }
+
+    setIsPurchasing(true);
+    // Simulate API call
+    await new Promise(r => setTimeout(r, 2000));
+    setIsPurchasing(false);
+    setPurchaseSuccess(true);
+    setSelectedProduct(null);
+    setCheckoutStep('selection');
+    setCheckoutData({
+      invoiceNumber: '', cardName: '', cardNumber: '', expiry: '', cvv: '',
+      bankName: '', sortCode: '', accountNumber: ''
+    });
+    setTimeout(() => setPurchaseSuccess(false), 5000);
+  };
 
   return (
     <div className="ps-container">
@@ -227,6 +267,16 @@ export default function PurchaseServices() {
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
           Your account has changed to {actualAccountType === 'Nonprofit' ? 'nonprofit' : 'business'} account
+        </div>
+      )}
+
+      {purchaseSuccess && (
+        <div className="ps-switch-success" style={{ backgroundColor: '#dff6dd', border: '1px solid #107c10', color: '#107c10' }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          Purchase successful! Your new licenses are being prepared.
         </div>
       )}
 
@@ -485,61 +535,178 @@ export default function PurchaseServices() {
             </div>
             
             <div className="pm-body">
-              <div className="pm-desc">{selectedProduct.desc}</div>
-              {/* <div className="pm-info-banner">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                This product doesn't include apps that you can download. If you need desktop apps, consider buying <a href="#" style={{color: '#0078d4', textDecoration: 'none'}}>Microsoft 365 Business Standard</a> or <a href="#" style={{color: '#0078d4', textDecoration: 'none'}}>Microsoft 365 Business Premium</a>.
-                <button style={{marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: 18}}>✕</button>
-              </div> */}
-
-              <div className="pm-grid">
-                <div>
-                  <div className="pm-section-title">Select license quantity</div>
-                  <input 
-                    type="number" 
-                    className="pm-quantity-input" 
-                    value={purchaseQty} 
-                    onChange={e => setPurchaseQty(e.target.value)} 
-                    min="1"
-                  />
-                </div>
-                
-                <div>
-                  <div className="pm-section-title">Select billing frequency*</div>
-                  <div className="pm-frequency-list">
-                    <div className="pm-radio-item" onClick={() => setBillingFreq('monthly')}>
-                      <div className={`pm-radio-circle ${billingFreq === 'monthly' ? 'active' : ''}`}></div>
-                      <div className="pm-radio-text">
-                        <span className="pm-radio-label">
-                          {selectedProduct.price.startsWith('Free') ? 'Free' : `£${(parseFloat(selectedProduct.price.match(/[\d.]+/)?.[0]) || 0).toFixed(2)}`} license/month
-                        </span>
-                        <span className="pm-radio-subtext">Pay monthly, annual commitment</span>
+              {checkoutStep === 'selection' ? (
+                <>
+                  <div className="pm-desc">{selectedProduct.desc}</div>
+                  <div className="pm-grid">
+                    <div>
+                      <div className="pm-section-title">Select license quantity</div>
+                      <input 
+                        type="number" 
+                        className="pm-quantity-input" 
+                        value={purchaseQty} 
+                        onChange={e => setPurchaseQty(e.target.value)} 
+                        min="1"
+                      />
+                    </div>
+                    
+                    <div>
+                      <div className="pm-section-title">Select billing frequency*</div>
+                      <div className="pm-frequency-list">
+                        <div className="pm-radio-item" onClick={() => setBillingFreq('monthly')}>
+                          <div className={`pm-radio-circle ${billingFreq === 'monthly' ? 'active' : ''}`}></div>
+                          <div className="pm-radio-text">
+                            <span className="pm-radio-label">
+                              {selectedProduct.price.startsWith('Free') ? 'Free' : `£${(parseFloat(selectedProduct.price.match(/[\d.]+/)?.[0]) || 0).toFixed(2)}`} license/year
+                            </span>
+                            <span className="pm-radio-subtext">Pay monthly, annual commitment</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    {/* <div className="pm-radio-item" onClick={() => setBillingFreq('yearly')}>
-                      <div className={`pm-radio-circle ${billingFreq === 'yearly' ? 'active' : ''}`}></div>
-                      <div className="pm-radio-text">
-                        <span className="pm-radio-label">
-                          {selectedProduct.price.startsWith('Free') ? 'Free' : `£${((parseFloat(selectedProduct.price.match(/[\d.]+/)?.[0]) || 0) * 12).toFixed(2)}`} license/year
-                        </span>
-                        <span className="pm-radio-subtext">Pay yearly, annual commitment</span>
-                      </div>
-                    </div> */}
-                  </div>
-                </div>
 
-                <div>
-                  <div className="pm-section-title">Subtotal before applicable taxes</div>
-                  <div className="pm-subtotal-val">
-                    {selectedProduct.price.startsWith('Free') ? 'Free' : 
-                      `£${(purchaseQty * (parseFloat(selectedProduct.price.match(/[\d.]+/)?.[0]) || 0) * (billingFreq === 'yearly' ? 12 : 1)).toFixed(2)}`
-                    }
+                    <div>
+                      <div className="pm-section-title">Subtotal before applicable taxes</div>
+                      <div className="pm-subtotal-val">
+                        {selectedProduct.price.startsWith('Free') ? 'Free' : 
+                          `£${(purchaseQty * (parseFloat(selectedProduct.price.match(/[\d.]+/)?.[0]) || 0) * (billingFreq === 'yearly' ? 12 : 1)).toFixed(2)}`
+                        }
+                      </div>
+                      <div style={{display: 'flex', alignItems: 'center'}}>
+                        <button 
+                          className="pm-buy-btn" 
+                          onClick={handleBuy}
+                          disabled={isPurchasing}
+                        >
+                          {isPurchasing ? 'Processing...' : 'Buy'}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div style={{display: 'flex', alignItems: 'center'}}>
-                    <button className="pm-buy-btn">Buy</button>
+                </>
+              ) : (
+                <div className="pm-checkout-form">
+                  <div className="pm-checkout-title">Checkout details</div>
+                  
+                  <div className="pm-form-section">
+                    <label className="pm-form-label">Invoice Number*</label>
+                    <input 
+                      type="text" 
+                      className="pm-form-input"
+                      placeholder="INV-2026-XXXX"
+                      value={checkoutData.invoiceNumber}
+                      onChange={e => setCheckoutData({...checkoutData, invoiceNumber: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="pm-form-section">
+                    <label className="pm-form-label">How would you like to pay?*</label>
+                    <div className="pm-method-selector">
+                      <label className="pm-method-opt">
+                        <input 
+                          type="radio" 
+                          name="payMethod" 
+                          checked={paymentMethod === 'card'} 
+                          onChange={() => setPaymentMethod('card')}
+                        />
+                        <span>Credit or debit card</span>
+                      </label>
+                      <label className="pm-method-opt">
+                        <input 
+                          type="radio" 
+                          name="payMethod" 
+                          checked={paymentMethod === 'bank'} 
+                          onChange={() => setPaymentMethod('bank')}
+                        />
+                        <span>Bank account</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {paymentMethod === 'card' ? (
+                    <div className="pm-card-fields">
+                      <div className="pm-form-section">
+                        <label className="pm-form-label">Card Number*</label>
+                        <input 
+                          type="text" 
+                          className="pm-form-input" 
+                          placeholder="XXXX XXXX XXXX XXXX"
+                          value={checkoutData.cardNumber}
+                          onChange={e => setCheckoutData({...checkoutData, cardNumber: e.target.value})}
+                        />
+                      </div>
+                      <div style={{display: 'flex', gap: 16}}>
+                        <div className="pm-form-section" style={{flex: 1}}>
+                          <label className="pm-form-label">Expiration (MM/YY)*</label>
+                          <input 
+                            type="text" 
+                            className="pm-form-input" 
+                            placeholder="MM/YY"
+                            value={checkoutData.expiry}
+                            onChange={e => setCheckoutData({...checkoutData, expiry: e.target.value})}
+                          />
+                        </div>
+                        <div className="pm-form-section" style={{flex: 1}}>
+                          <label className="pm-form-label">CVV*</label>
+                          <input 
+                            type="text" 
+                            className="pm-form-input" 
+                            placeholder="XXX"
+                            value={checkoutData.cvv}
+                            onChange={e => setCheckoutData({...checkoutData, cvv: e.target.value})}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="pm-bank-fields">
+                      <div className="pm-form-section">
+                        <label className="pm-form-label">Bank Name*</label>
+                        <input 
+                          type="text" 
+                          className="pm-form-input" 
+                          placeholder="Enter your bank name"
+                          value={checkoutData.bankName}
+                          onChange={e => setCheckoutData({...checkoutData, bankName: e.target.value})}
+                        />
+                      </div>
+                      <div style={{display: 'flex', gap: 16}}>
+                        <div className="pm-form-section" style={{flex: 1}}>
+                          <label className="pm-form-label">Sort Code*</label>
+                          <input 
+                            type="text" 
+                            className="pm-form-input" 
+                            placeholder="XX-XX-XX"
+                            value={checkoutData.sortCode}
+                            onChange={e => setCheckoutData({...checkoutData, sortCode: e.target.value})}
+                          />
+                        </div>
+                        <div className="pm-form-section" style={{flex: 1}}>
+                          <label className="pm-form-label">Account Number*</label>
+                          <input 
+                            type="text" 
+                            className="pm-form-input" 
+                            placeholder="XXXXXXXX"
+                            value={checkoutData.accountNumber}
+                            onChange={e => setCheckoutData({...checkoutData, accountNumber: e.target.value})}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="pm-checkout-footer">
+                    <button className="pm-cancel-btn" onClick={() => setCheckoutStep('selection')}>Back</button>
+                    <button 
+                      className="pm-buy-btn" 
+                      onClick={handleBuy}
+                      disabled={isPurchasing}
+                    >
+                      {isPurchasing ? 'Processing...' : 'Complete Purchase'}
+                    </button>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
