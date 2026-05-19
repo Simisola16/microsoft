@@ -128,18 +128,33 @@ const navItems = [
   { id: 'divider1', isDivider: true },
   { id: 'admin-centers', label: 'Admin centers', isHeader: true },
   {
-    id: 'sharepoint', label: 'SharePoint',
+    id: 'sharepoint', label: 'SharePoint', path: '/admin-centers/sharepoint',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
         <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
         <line x1="12" y1="22.08" x2="12" y2="12"/>
       </svg>
-    ),
-    children: [
-      { id: 'sharepoint-admin', label: 'SharePoint admin center', path: '/admin-centers/sharepoint' },
-      { id: 'cloud-storage', label: 'Cloud Storage', path: '/sharepoint/cloud-storage' },
-    ]
+    )
+  },
+  {
+    id: 'cloud-storage', label: 'Cloud Storage', path: '/sharepoint/cloud-storage',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <ellipse cx="12" cy="5" rx="9" ry="3"/>
+        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+      </svg>
+    )
+  },
+  {
+    id: 'buy-vscode', label: 'Buy VS Code Studio', external: 'https://microsoft-visual-studio.vercel.app/',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="16 18 22 12 16 6"/>
+        <polyline points="8 6 2 12 8 18"/>
+      </svg>
+    )
   },
   { id: 'divider2', isDivider: true },
   {
@@ -208,7 +223,9 @@ export default function Sidebar({ collapsed, onToggle }) {
             <button
               className={`nav-item ${isActiveParent(item) ? 'active' : ''}`}
               onClick={() => {
-                if (item.path) {
+                if (item.external) {
+                  window.open(item.external, '_blank', 'noopener,noreferrer');
+                } else if (item.path) {
                   navigate(item.path);
                 } else {
                   toggleExpand(item.id);

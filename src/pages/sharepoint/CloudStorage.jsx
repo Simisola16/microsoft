@@ -284,7 +284,7 @@ export default function CloudStorage() {
                 <div className="cs-rec-icon">🚨</div>
                 <div className="cs-rec-body">
                   <span className="cs-rec-title">Archive aged data</span>
-                  <span className="cs-rec-text">Move data older than 12 months to cold storage</span>
+                  <span className="cs-rec-text">Move data older than 1 Year to cold storage</span>
                 </div>
                 <span className="cs-rec-tag cs-tag-critical">Critical</span>
               </div>
@@ -382,7 +382,7 @@ export default function CloudStorage() {
                 </ul>
                 <button
                   className="cs-plan-btn cs-plan-btn-outline"
-                  onClick={() => setSelectedPlan({ name: '12 Months', price: '£3,840', period: 'billed annually · £320/mo' })}
+                  onClick={() => setSelectedPlan({ name: '12 Months', price: '£3,840', period: 'billed annually' })}
                 >Buy Plan</button>
               </div>
 
