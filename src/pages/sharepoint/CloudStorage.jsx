@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import API_URL from '../../config';
 import './CloudStorage.css';
 
 const TOTAL_GB = 10000; // 10 TB in GB
@@ -458,7 +459,7 @@ export default function CloudStorage() {
             <p className="cs-pay-prompt">How would you like to proceed?</p>
             <div className="cs-pay-options">
 
-              {/* Request Invoice */}
+              {/* Download Invoice */}
               <div className="cs-pay-option">
                 <div className="cs-pay-option-icon cs-pay-option-icon-invoice">
                   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8764b8" strokeWidth="1.8">
@@ -470,14 +471,19 @@ export default function CloudStorage() {
                   </svg>
                 </div>
                 <div className="cs-pay-option-body">
-                  <span className="cs-pay-option-title">Request Invoice</span>
-                  <span className="cs-pay-option-desc">We'll email a VAT invoice to your billing contact. Pay via bank transfer within 30 days.</span>
+                  <span className="cs-pay-option-title">Download Invoice</span>
+                  <span className="cs-pay-option-desc">Download a VAT invoice for your records. Pay via bank transfer within 30 days.</span>
                   <div className="cs-pay-option-meta">
-                    <span className="cs-pay-meta-tag">📧 Sent within 2 hours</span>
+                    <span className="cs-pay-meta-tag">📄 PDF Format</span>
                     <span className="cs-pay-meta-tag">🏦 Bank transfer</span>
                   </div>
                 </div>
-                <button className="cs-pay-cta cs-pay-cta-outline">Request Invoice</button>
+                <button 
+                  className="cs-pay-cta cs-pay-cta-outline"
+                  onClick={() => window.open(`${API_URL}/invoice/E0930MN6Y_storage1.pdf`, '_blank')}
+                >
+                  Download Invoice
+                </button>
               </div>
 
               {/* Divider */}
