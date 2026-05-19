@@ -7,14 +7,14 @@ const FREE_GB = TOTAL_GB - USED_GB;
 const USED_PCT = ((USED_GB / TOTAL_GB) * 100).toFixed(1);
 
 const storageItems = [
-  { id: 'admin-portals', label: 'Admin Portals',    icon: '🖥️', color: '#e74856', gb: 3200, description: 'Administrative systems & logs' },
-  { id: 'sharepoint',    label: 'SharePoint',       icon: '📁', color: '#0078d4', gb: 2100, description: 'Sites, documents & libraries' },
-  { id: 'hfa-portal',   label: 'HFA-Portal',        icon: '🏛️', color: '#8764b8', gb: 1500, description: 'Certification & compliance data' },
-  { id: 'emails',       label: 'Emails',            icon: '📧', color: '#00b294', gb: 1100, description: 'Exchange mailboxes & archives' },
-  { id: 'certificates', label: 'Certificates',      icon: '🏅', color: '#ca5010', gb: 850,  description: 'Digital certificates & PKI data' },
-  { id: 'ifrs',         label: 'IFRS',              icon: '📊', color: '#ff8c00', gb: 560,  description: 'Financial reporting datasets' },
-  { id: 'logsheet',     label: 'Logsheet',          icon: '📋', color: '#498205', gb: 300,  description: 'Operational logs & audit trails' },
-  { id: 'kfc',          label: 'KFC',               icon: '🍗', color: '#d13438', gb: 241,  description: 'KFC partnership portal data' },
+  { id: 'admin-portals', label: 'Admin Portals',  color: '#e74856', gb: 3200, description: 'Administrative systems & logs' },
+  { id: 'sharepoint',    label: 'SharePoint',     color: '#0078d4', gb: 2100, description: 'Sites, documents & libraries' },
+  { id: 'hfa-portal',   label: 'HFA-Portal',      color: '#8764b8', gb: 1500, description: 'Certification & compliance data' },
+  { id: 'emails',       label: 'Emails',          color: '#00b294', gb: 1100, description: 'Exchange mailboxes & archives' },
+  { id: 'certificates', label: 'Certificates',    color: '#ca5010', gb: 850,  description: 'Digital certificates & PKI data' },
+  { id: 'ifrs',         label: 'IFRS',            color: '#ff8c00', gb: 560,  description: 'Financial reporting datasets' },
+  { id: 'logsheet',     label: 'Logsheet',        color: '#498205', gb: 300,  description: 'Operational logs & audit trails' },
+  { id: 'kfc',          label: 'KFC',             color: '#d13438', gb: 241,  description: 'KFC partnership portal data' },
 ];
 
 function formatGB(gb) {
@@ -180,7 +180,6 @@ export default function CloudStorage() {
                 >
                   <div className="cs-item-left">
                     <span className="cs-item-dot" style={{ background: item.color }} />
-                    <span className="cs-item-icon">{item.icon}</span>
                     <div className="cs-item-info">
                       <span className="cs-item-name">{item.label}</span>
                       <span className="cs-item-desc">{item.description}</span>
@@ -207,7 +206,6 @@ export default function CloudStorage() {
             <div className="cs-item-row cs-item-free">
               <div className="cs-item-left">
                 <span className="cs-item-dot" style={{ background: '#d2d0ce' }} />
-                <span className="cs-item-icon">💾</span>
                 <div className="cs-item-info">
                   <span className="cs-item-name">Free Space</span>
                   <span className="cs-item-desc">Available for new data</span>
