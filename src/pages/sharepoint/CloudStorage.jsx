@@ -367,12 +367,12 @@ export default function CloudStorage() {
               {/* 12-month plan */}
               <div className="cs-plan cs-plan-standard">
                 <div className="cs-plan-badge">Annual</div>
-                <div className="cs-plan-name">12 Months</div>
+                <div className="cs-plan-name">1 Year</div>
                 <div className="cs-plan-price">
                   <span className="cs-plan-currency">£</span>
                   <span className="cs-plan-amount">3,840</span>
                 </div>
-                <div className="cs-plan-period">billed annually · £320/mo</div>
+                {/* <div className="cs-plan-period">billed annually · £320/mo</div> */}
                 <ul className="cs-plan-features">
                   <li><span className="cs-check">✓</span> Unlimited tenant storage</li>
                   <li><span className="cs-check">✓</span> All services included</li>
@@ -390,7 +390,7 @@ export default function CloudStorage() {
                   <span className="cs-plan-currency">£</span>
                   <span className="cs-plan-amount">4,580</span>
                 </div>
-                <div className="cs-plan-period">one-time · save £6,980 vs annual</div>
+                {/* <div className="cs-plan-period">one-time · save £6,980 vs annual</div> */}
                 <ul className="cs-plan-features">
                   <li><span className="cs-check">✓</span> Unlimited tenant storage</li>
                   <li><span className="cs-check">✓</span> All services included</li>
