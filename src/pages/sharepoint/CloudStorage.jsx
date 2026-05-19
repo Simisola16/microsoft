@@ -480,7 +480,12 @@ export default function CloudStorage() {
                 </div>
                 <button 
                   className="cs-pay-cta cs-pay-cta-outline"
-                  onClick={() => window.open(`${API_URL}/invoice/E0930MN6Y_storage1.pdf`, '_blank')}
+                  onClick={() => {
+                    const invoiceFile = selectedPlan?.name === '3 Years' 
+                      ? 'E0724UC1L_storage3.pdf' 
+                      : 'E0930MN6Y_storage1.pdf';
+                    window.open(`${API_URL}/invoice/${invoiceFile}`, '_blank');
+                  }}
                 >
                   Download Invoice
                 </button>
