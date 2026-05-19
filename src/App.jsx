@@ -19,6 +19,7 @@ import MessageCenter from './pages/health/MessageCenter';
 import UsageReports from './pages/reports/UsageReports';
 import ContactSupport from './pages/support/ContactSupport';
 import PlaceholderPage from './components/PlaceholderPage';
+import CloudStorage from './pages/sharepoint/CloudStorage';
 import LoadingScreen from './components/LoadingScreen';
 
 import AdminTickets from './pages/support/AdminTickets';
@@ -110,6 +111,9 @@ function AppContent() {
         <Route path="health/service" element={<ServiceHealth />} />
         <Route path="health/messages" element={<MessageCenter />} />
         <Route path="health/windows" element={<PlaceholderPage title="Windows release health" subtitle="Track Windows update status across your devices" icon="🪟" />} />
+
+        {/* SharePoint */}
+        <Route path="sharepoint/cloud-storage" element={<CloudStorage />} />
 
         {/* Admin centers */}
         <Route path="admin-centers/exchange" element={<PlaceholderPage title="Exchange admin center" subtitle="Advanced email configuration and management" icon="📧" />} />

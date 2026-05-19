@@ -1,0 +1,523 @@
+/* ═══════════════════════════════════════════════════════════
+   Cloud Storage Page — Professional Microsoft 365 Style
+   ═══════════════════════════════════════════════════════════ */
+
+.cs-page {
+  padding: 28px 32px;
+  background: #faf9f8;
+  min-height: 100vh;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  position: relative;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.cs-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.cs-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #605e5c;
+  margin-bottom: 6px;
+}
+.cs-breadcrumb-parent { color: #0078d4; font-weight: 500; }
+.cs-breadcrumb-current { color: #323130; font-weight: 500; }
+
+.cs-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #201f1e;
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+}
+.cs-subtitle {
+  font-size: 13px;
+  color: #605e5c;
+  margin: 0;
+}
+
+.cs-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+
+.cs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+.cs-btn-ghost {
+  background: #fff;
+  border-color: #d2d0ce;
+  color: #323130;
+}
+.cs-btn-ghost:hover { background: #f3f2f1; border-color: #8a8886; }
+
+.cs-btn-primary {
+  background: #0078d4;
+  color: #fff;
+  border-color: #0078d4;
+}
+.cs-btn-primary:hover { background: #106ebe; }
+
+/* ── Alert Banner ────────────────────────────────────────── */
+.cs-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #fef0ef 0%, #fde8e7 100%);
+  border: 1.5px solid #e74856;
+  border-radius: 8px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(231, 72, 86, 0.08);
+  animation: bannerSlide 0.4s ease;
+}
+
+@keyframes bannerSlide {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cs-alert-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(231, 72, 86, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e74856;
+  flex-shrink: 0;
+}
+
+.cs-alert-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cs-alert-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #a4262c;
+}
+.cs-alert-text {
+  font-size: 13px;
+  color: #604034;
+  line-height: 1.5;
+}
+.cs-alert-text strong { color: #a4262c; }
+
+.cs-alert-cta {
+  padding: 8px 18px;
+  background: #e74856;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+.cs-alert-cta:hover { background: #a4262c; }
+
+/* ── KPI Cards ───────────────────────────────────────────── */
+.cs-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.cs-kpi-card {
+  background: #fff;
+  border: 1px solid #edebe9;
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.cs-kpi-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.cs-kpi-danger  { border-left: 4px solid #e74856; }
+.cs-kpi-warning { border-left: 4px solid #ff8c00; }
+.cs-kpi-neutral { border-left: 4px solid #0078d4; }
+
+.cs-kpi-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cs-kpi-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cs-kpi-value {
+  font-size: 19px;
+  font-weight: 700;
+  color: #201f1e;
+  line-height: 1.2;
+}
+.cs-kpi-label {
+  font-size: 12px;
+  color: #605e5c;
+  font-weight: 500;
+}
+
+.cs-kpi-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+.cs-badge-danger  { background: #fde7e9; color: #a4262c; }
+.cs-badge-warning { background: #fff4ce; color: #8a4f00; }
+.cs-badge-neutral { background: #deecf9; color: #0078d4; }
+
+/* ── Content Grid ────────────────────────────────────────── */
+.cs-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 18px;
+  align-items: start;
+}
+
+/* ── Cards ───────────────────────────────────────────────── */
+.cs-card {
+  background: #fff;
+  border: 1px solid #edebe9;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.cs-card-header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid #f3f2f1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cs-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #201f1e;
+  margin: 0;
+}
+.cs-card-subtitle {
+  font-size: 12px;
+  color: #605e5c;
+}
+
+/* ── Segmented Bar ───────────────────────────────────────── */
+.cs-seg-bar-wrap {
+  padding: 20px 22px 10px;
+}
+
+.cs-seg-bar {
+  display: flex;
+  width: 100%;
+  height: 28px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #f3f2f1;
+  gap: 2px;
+}
+
+.cs-seg-segment {
+  height: 100%;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+  border-radius: 3px;
+}
+.cs-seg-segment:hover { filter: brightness(1.12); }
+
+.cs-seg-free {
+  background: #d2d0ce;
+  border-radius: 0 4px 4px 0;
+}
+
+.cs-seg-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #8a8886;
+  font-weight: 500;
+}
+
+/* ── Item List ───────────────────────────────────────────── */
+.cs-item-list {
+  padding: 8px 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cs-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 6px;
+  transition: background 0.15s;
+  cursor: default;
+  gap: 12px;
+}
+.cs-item-row:hover,
+.cs-item-row.hovered { background: #f3f2f1; }
+.cs-item-free { opacity: 0.75; }
+
+.cs-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 0 0 260px;
+}
+.cs-item-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cs-item-icon {
+  font-size: 17px;
+  flex-shrink: 0;
+}
+.cs-item-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.cs-item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #201f1e;
+  white-space: nowrap;
+}
+.cs-item-desc {
+  font-size: 11px;
+  color: #8a8886;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cs-item-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.cs-item-bar-wrap {
+  flex: 1;
+  max-width: 160px;
+  height: 7px;
+  background: #f3f2f1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.cs-item-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+}
+.cs-item-bar-free { background: #d2d0ce; }
+
+.cs-item-pct {
+  font-size: 12px;
+  font-weight: 700;
+  color: #323130;
+  width: 42px;
+  text-align: right;
+}
+.cs-item-pct-free { color: #8a8886; }
+
+.cs-item-size {
+  font-size: 12px;
+  font-weight: 600;
+  color: #605e5c;
+  width: 68px;
+  text-align: right;
+}
+.cs-item-size-free { color: #8a8886; }
+
+/* ── Right column ────────────────────────────────────────── */
+.cs-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ── Donut ───────────────────────────────────────────────── */
+.cs-donut-card .cs-card-header { padding-bottom: 10px; }
+
+.cs-donut-wrap {
+  padding: 20px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.cs-donut-svg {
+  width: 200px;
+  height: 200px;
+}
+.cs-donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.cs-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #323130;
+  font-weight: 500;
+}
+.cs-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Recommendations ─────────────────────────────────────── */
+.cs-rec-list {
+  padding: 12px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cs-rec-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  transition: transform 0.15s, box-shadow 0.15s;
+  cursor: default;
+}
+.cs-rec-item:hover { transform: translateX(3px); box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+
+.cs-rec-critical { background: #fef0ef; border-color: #f4b8bc; }
+.cs-rec-high     { background: #fff9f0; border-color: #ffd26a; }
+.cs-rec-medium   { background: #f0f9fd; border-color: #9bc2e6; }
+.cs-rec-low      { background: #f4faf0; border-color: #9dc08b; }
+
+.cs-rec-icon { font-size: 20px; flex-shrink: 0; }
+.cs-rec-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.cs-rec-title { font-size: 13px; font-weight: 700; color: #201f1e; }
+.cs-rec-text  { font-size: 11.5px; color: #605e5c; line-height: 1.4; }
+
+.cs-rec-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.cs-tag-critical { background: #a4262c; color: #fff; }
+.cs-tag-high     { background: #ff8c00; color: #fff; }
+.cs-tag-medium   { background: #0078d4; color: #fff; }
+.cs-tag-low      { background: #498205; color: #fff; }
+
+/* ── Tooltip ─────────────────────────────────────────────── */
+.cs-tooltip {
+  position: fixed;
+  z-index: 9999;
+  background: #201f1e;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  max-width: 230px;
+  animation: ttFade 0.15s ease;
+}
+@keyframes ttFade {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.cs-tooltip-icon { font-size: 20px; }
+.cs-tooltip-name { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
+.cs-tooltip-val  { color: #ffb900; font-weight: 600; margin-bottom: 2px; }
+.cs-tooltip-desc { color: #c8c6c4; font-size: 11.5px; line-height: 1.4; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .cs-content-grid {
+    grid-template-columns: 1fr;
+  }
+  .cs-right-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .cs-kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .cs-right-col { grid-template-columns: 1fr; }
+  .cs-page { padding: 16px; }
+}
+
+@media (max-width: 600px) {
+  .cs-kpi-row { grid-template-columns: 1fr; }
+  .cs-header { flex-direction: column; }
+  .cs-item-left { flex: 0 0 auto; max-width: 160px; }
+  .cs-item-bar-wrap { max-width: 80px; }
+}
