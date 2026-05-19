@@ -3,19 +3,19 @@ import API_URL from '../../config';
 import './CloudStorage.css';
 
 const TOTAL_GB = 10000; // 10 TB in GB
-const USED_GB = 9851;
+const USED_GB = 9540;
 const FREE_GB = TOTAL_GB - USED_GB;
 const USED_PCT = ((USED_GB / TOTAL_GB) * 100).toFixed(1);
 
 const storageItems = [
-  { id: 'admin-portals', label: 'Admin Portals',  color: '#e74856', gb: 3200, description: 'Administrative systems & logs' },
-  { id: 'sharepoint',    label: 'SharePoint',     color: '#0078d4', gb: 2100, description: 'Sites, documents & libraries' },
+  { id: 'admin-portals', label: 'Admin Portals',  color: '#e74856', gb: 3100, description: 'Administrative systems & logs' },
+  { id: 'sharepoint',    label: 'SharePoint',     color: '#0078d4', gb: 2000, description: 'Sites, documents & libraries' },
   { id: 'hfa-portal',   label: 'HFA-Portal',      color: '#8764b8', gb: 1500, description: 'Certification & compliance data' },
   { id: 'emails',       label: 'Emails',          color: '#00b294', gb: 1100, description: 'Exchange mailboxes & archives' },
   { id: 'certificates', label: 'Certificates',    color: '#ca5010', gb: 850,  description: 'Digital certificates & PKI data' },
   { id: 'ifrs',         label: 'IFRS',            color: '#ff8c00', gb: 560,  description: 'Financial reporting datasets' },
   { id: 'logsheet',     label: 'Logsheet',        color: '#498205', gb: 300,  description: 'Operational logs & audit trails' },
-  { id: 'kfc',          label: 'KFC',             color: '#d13438', gb: 241,  description: 'KFC partnership portal data' },
+  { id: 'kfc',          label: 'KFC',             color: '#d13438', gb: 130,  description: 'KFC partnership portal data' },
 ];
 
 function formatGB(gb) {
