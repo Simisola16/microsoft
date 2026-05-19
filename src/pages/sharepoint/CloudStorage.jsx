@@ -503,9 +503,9 @@ export default function CloudStorage() {
               </div>
             </div>
 
-            <p className="cs-modal-note" style={{ borderTop: '1px solid #f3f2f1', marginTop: 0 }}>
+            {/* <p className="cs-modal-note" style={{ borderTop: '1px solid #f3f2f1', marginTop: 0 }}>
               All prices exclude VAT · 14-day cooling-off period · Questions? <strong>licensing@microsoft365.com</strong>
-            </p>
+            </p> */}
           </div>
         </div>
       )}
