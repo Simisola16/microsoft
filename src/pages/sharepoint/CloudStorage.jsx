@@ -402,10 +402,10 @@ export default function CloudStorage() {
               </div>
             </div>
 
-            <p className="cs-modal-note">
+            {/* <p className="cs-modal-note">
               All prices exclude VAT. Licences are non-refundable after 14-day cooling-off period.
               Contact <strong>licensing@microsoft365.com</strong> for volume discounts.
-            </p>
+            </p> */}
           </div>
         </div>
       )}
