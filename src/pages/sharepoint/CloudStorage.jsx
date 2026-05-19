@@ -26,6 +26,7 @@ export default function CloudStorage() {
   const [animated, setAnimated] = useState(false);
   const [tooltip, setTooltip] = useState(null);
   const [hovered, setHovered] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const barRef = useRef(null);
 
   useEffect(() => {
@@ -72,7 +73,7 @@ export default function CloudStorage() {
             Immediate action required to prevent service disruption.
           </span>
         </div>
-        <button className="cs-alert-cta">Manage Storage</button>
+        <button className="cs-alert-cta" onClick={() => setShowModal(true)}>Buy unlimited storage</button>
       </div>
 
       {/* ── KPI Cards ───────────────────────────────────────── */}
@@ -321,11 +322,90 @@ export default function CloudStorage() {
           className="cs-tooltip"
           style={{ top: tooltip.y + 14, left: tooltip.x + 14 }}
         >
-          <span className="cs-tooltip-icon">{tooltip.item.icon}</span>
           <div>
             <div className="cs-tooltip-name">{tooltip.item.label}</div>
             <div className="cs-tooltip-val">{formatGB(tooltip.item.gb)} · {pct(tooltip.item.gb)}%</div>
             <div className="cs-tooltip-desc">{tooltip.item.description}</div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Buy Unlimited Storage Modal ──────────────────────── */}
+      {showModal && (
+        <div className="cs-modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="cs-modal" onClick={(e) => e.stopPropagation()}>
+            {/* Modal header */}
+            <div className="cs-modal-header">
+              <div className="cs-modal-header-left">
+                <div className="cs-modal-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0078d4" strokeWidth="2">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="cs-modal-title">Unlimited Cloud Storage</h2>
+                  <p className="cs-modal-subtitle">SharePoint Online · Microsoft 365 Add-on</p>
+                </div>
+              </div>
+              <button className="cs-modal-close" onClick={() => setShowModal(false)}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* Description */}
+            <p className="cs-modal-desc">
+              Remove storage limits across your entire tenant. All services — SharePoint, HFA-Portal,
+              Emails, and more — get unrestricted capacity with guaranteed uptime SLA.
+            </p>
+
+            {/* Plans */}
+            <div className="cs-plans">
+              {/* 12-month plan */}
+              <div className="cs-plan cs-plan-standard">
+                <div className="cs-plan-badge">Annual</div>
+                <div className="cs-plan-name">12 Months</div>
+                <div className="cs-plan-price">
+                  <span className="cs-plan-currency">£</span>
+                  <span className="cs-plan-amount">3,840</span>
+                </div>
+                <div className="cs-plan-period">billed annually · £320/mo</div>
+                <ul className="cs-plan-features">
+                  <li><span className="cs-check">✓</span> Unlimited tenant storage</li>
+                  <li><span className="cs-check">✓</span> All services included</li>
+                  <li><span className="cs-check">✓</span> 99.9% uptime SLA</li>
+                  <li><span className="cs-check">✓</span> 24/7 priority support</li>
+                </ul>
+                <button className="cs-plan-btn cs-plan-btn-outline">Select Plan</button>
+              </div>
+
+              {/* 3-year plan */}
+              <div className="cs-plan cs-plan-pro">
+                <div className="cs-plan-badge cs-plan-badge-pro">Best Value</div>
+                <div className="cs-plan-name">3 Years</div>
+                <div className="cs-plan-price">
+                  <span className="cs-plan-currency">£</span>
+                  <span className="cs-plan-amount">4,580</span>
+                </div>
+                <div className="cs-plan-period">one-time · save £6,980 vs annual</div>
+                <ul className="cs-plan-features">
+                  <li><span className="cs-check">✓</span> Unlimited tenant storage</li>
+                  <li><span className="cs-check">✓</span> All services included</li>
+                  <li><span className="cs-check">✓</span> 99.99% uptime SLA</li>
+                  <li><span className="cs-check">✓</span> Dedicated account manager</li>
+                  <li><span className="cs-check">✓</span> Advanced analytics dashboard</li>
+                </ul>
+                <button className="cs-plan-btn cs-plan-btn-primary">Select Plan</button>
+              </div>
+            </div>
+
+            <p className="cs-modal-note">
+              All prices exclude VAT. Licences are non-refundable after 14-day cooling-off period.
+              Contact <strong>licensing@microsoft365.com</strong> for volume discounts.
+            </p>
           </div>
         </div>
       )}

@@ -493,10 +493,252 @@
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
 }
-.cs-tooltip-icon { font-size: 20px; }
 .cs-tooltip-name { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
 .cs-tooltip-val  { color: #ffb900; font-weight: 600; margin-bottom: 2px; }
 .cs-tooltip-desc { color: #c8c6c4; font-size: 11.5px; line-height: 1.4; }
+
+/* ── Modal overlay ───────────────────────────────────────── */
+.cs-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: overlayFade 0.2s ease;
+}
+@keyframes overlayFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.cs-modal {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+  width: 100%;
+  max-width: 640px;
+  overflow: hidden;
+  animation: modalSlide 0.25s cubic-bezier(.4,0,.2,1);
+}
+@keyframes modalSlide {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Modal header ────────────────────────────────────────── */
+.cs-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 26px 16px;
+  border-bottom: 1px solid #edebe9;
+  background: linear-gradient(135deg, #f0f6ff 0%, #fff 100%);
+}
+.cs-modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.cs-modal-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: #deecf9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cs-modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #201f1e;
+  margin: 0 0 3px;
+  letter-spacing: -0.2px;
+}
+.cs-modal-subtitle {
+  font-size: 12px;
+  color: #605e5c;
+  margin: 0;
+}
+.cs-modal-close {
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: #f3f2f1;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #605e5c;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.cs-modal-close:hover { background: #edebe9; color: #201f1e; }
+
+/* ── Modal body ──────────────────────────────────────────── */
+.cs-modal-desc {
+  margin: 0;
+  padding: 16px 26px;
+  font-size: 13.5px;
+  color: #605e5c;
+  line-height: 1.6;
+  border-bottom: 1px solid #f3f2f1;
+}
+
+/* ── Plans grid ──────────────────────────────────────────── */
+.cs-plans {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 20px 26px;
+}
+
+.cs-plan {
+  border-radius: 10px;
+  border: 2px solid #edebe9;
+  padding: 22px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.cs-plan:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+}
+
+/* Standard plan */
+.cs-plan-standard { background: #faf9f8; }
+.cs-plan-standard:hover { border-color: #0078d4; }
+
+/* Pro / best value plan */
+.cs-plan-pro {
+  background: linear-gradient(160deg, #f0f6ff 0%, #e6f2ff 100%);
+  border-color: #0078d4;
+  box-shadow: 0 4px 16px rgba(0,120,212,0.10);
+}
+
+.cs-plan-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  background: #edebe9;
+  color: #605e5c;
+  padding: 3px 9px;
+  border-radius: 10px;
+  width: fit-content;
+  margin-bottom: 4px;
+}
+.cs-plan-badge-pro {
+  background: #0078d4;
+  color: #fff;
+}
+
+.cs-plan-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #201f1e;
+}
+
+.cs-plan-price {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  margin: 6px 0 2px;
+}
+.cs-plan-currency {
+  font-size: 18px;
+  font-weight: 700;
+  color: #201f1e;
+  margin-top: 4px;
+}
+.cs-plan-amount {
+  font-size: 40px;
+  font-weight: 800;
+  color: #201f1e;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.cs-plan-period {
+  font-size: 11.5px;
+  color: #8a8886;
+  margin-bottom: 12px;
+}
+
+.cs-plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+}
+.cs-plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #323130;
+}
+.cs-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #dff6dd;
+  color: #107c10;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cs-plan-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.15s;
+  letter-spacing: 0.2px;
+}
+.cs-plan-btn-outline {
+  background: #fff;
+  border: 1.5px solid #0078d4;
+  color: #0078d4;
+}
+.cs-plan-btn-outline:hover { background: #deecf9; }
+
+.cs-plan-btn-primary {
+  background: #0078d4;
+  color: #fff;
+}
+.cs-plan-btn-primary:hover { background: #106ebe; }
+
+/* ── Modal note ──────────────────────────────────────────── */
+.cs-modal-note {
+  margin: 0;
+  padding: 14px 26px 20px;
+  font-size: 11.5px;
+  color: #8a8886;
+  line-height: 1.5;
+  border-top: 1px solid #f3f2f1;
+}
+.cs-modal-note strong { color: #323130; }
 
 /* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 1100px) {
@@ -513,6 +755,15 @@
   .cs-kpi-row { grid-template-columns: repeat(2, 1fr); }
   .cs-right-col { grid-template-columns: 1fr; }
   .cs-page { padding: 16px; }
+}
+
+@media (max-width: 640px) {
+  .cs-plans { grid-template-columns: 1fr; }
+  .cs-modal { border-radius: 10px; }
+  .cs-modal-header { padding: 16px 18px 14px; }
+  .cs-modal-desc { padding: 14px 18px; }
+  .cs-plans { padding: 16px 18px; }
+  .cs-modal-note { padding: 12px 18px 16px; }
 }
 
 @media (max-width: 600px) {
