@@ -7,14 +7,14 @@ const FREE_GB = TOTAL_GB - USED_GB;
 const USED_PCT = ((USED_GB / TOTAL_GB) * 100).toFixed(1);
 
 const storageItems = [
-  { id: 'sharepoint',     label: 'SharePoint',      icon: '📁', color: '#0078d4', gb: 2840, description: 'Sites, documents & libraries' },
-  { id: 'hfa-portal',    label: 'HFA-Portal',       icon: '🏛️', color: '#8764b8', gb: 1920, description: 'Certification & compliance data' },
-  { id: 'emails',        label: 'Emails',           icon: '📧', color: '#00b294', gb: 1650, description: 'Exchange mailboxes & archives' },
-  { id: 'ifrs',          label: 'IFRS',             icon: '📊', color: '#ff8c00', gb: 1230, description: 'Financial reporting datasets' },
-  { id: 'admin-portals', label: 'Admin Portals',    icon: '🖥️', color: '#e74856', gb: 890,  description: 'Administrative systems & logs' },
-  { id: 'logsheet',      label: 'Logsheet',         icon: '📋', color: '#498205', gb: 720,  description: 'Operational logs & audit trails' },
-  { id: 'certificates',  label: 'Certificates',     icon: '🏅', color: '#ca5010', gb: 461,  description: 'Digital certificates & PKI data' },
-  { id: 'kfc',           label: 'KFC',              icon: '🍗', color: '#d13438', gb: 140,  description: 'KFC partnership portal data' },
+  { id: 'admin-portals', label: 'Admin Portals',    icon: '🖥️', color: '#e74856', gb: 3200, description: 'Administrative systems & logs' },
+  { id: 'sharepoint',    label: 'SharePoint',       icon: '📁', color: '#0078d4', gb: 2100, description: 'Sites, documents & libraries' },
+  { id: 'hfa-portal',   label: 'HFA-Portal',        icon: '🏛️', color: '#8764b8', gb: 1500, description: 'Certification & compliance data' },
+  { id: 'emails',       label: 'Emails',            icon: '📧', color: '#00b294', gb: 1100, description: 'Exchange mailboxes & archives' },
+  { id: 'certificates', label: 'Certificates',      icon: '🏅', color: '#ca5010', gb: 850,  description: 'Digital certificates & PKI data' },
+  { id: 'ifrs',         label: 'IFRS',              icon: '📊', color: '#ff8c00', gb: 560,  description: 'Financial reporting datasets' },
+  { id: 'logsheet',     label: 'Logsheet',          icon: '📋', color: '#498205', gb: 300,  description: 'Operational logs & audit trails' },
+  { id: 'kfc',          label: 'KFC',               icon: '🍗', color: '#d13438', gb: 241,  description: 'KFC partnership portal data' },
 ];
 
 function formatGB(gb) {
