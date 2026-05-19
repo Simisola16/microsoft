@@ -27,6 +27,7 @@ export default function CloudStorage() {
   const [tooltip, setTooltip] = useState(null);
   const [hovered, setHovered] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null); // { name, price, period }
   const barRef = useRef(null);
 
   useEffect(() => {
@@ -332,7 +333,7 @@ export default function CloudStorage() {
 
       {/* ── Buy Unlimited Storage Modal ──────────────────────── */}
       {showModal && (
-        <div className="cs-modal-overlay" onClick={() => setShowModal(false)}>
+        <div className="cs-modal-overlay" onClick={() => { setShowModal(false); setSelectedPlan(null); }}>
           <div className="cs-modal" onClick={(e) => e.stopPropagation()}>
             {/* Modal header */}
             <div className="cs-modal-header">
@@ -349,7 +350,7 @@ export default function CloudStorage() {
                   <p className="cs-modal-subtitle">SharePoint Online · Microsoft 365 Add-on</p>
                 </div>
               </div>
-              <button className="cs-modal-close" onClick={() => setShowModal(false)}>
+              <button className="cs-modal-close" onClick={() => { setShowModal(false); setSelectedPlan(null); }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
@@ -379,7 +380,10 @@ export default function CloudStorage() {
                   <li><span className="cs-check">✓</span> 99.9% uptime SLA</li>
                   <li><span className="cs-check">✓</span> 24/7 priority support</li>
                 </ul>
-                <button className="cs-plan-btn cs-plan-btn-outline">Select Plan</button>
+                <button
+                  className="cs-plan-btn cs-plan-btn-outline"
+                  onClick={() => setSelectedPlan({ name: '12 Months', price: '£3,840', period: 'billed annually · £320/mo' })}
+                >Buy Plan</button>
               </div>
 
               {/* 3-year plan */}
@@ -398,7 +402,10 @@ export default function CloudStorage() {
                   <li><span className="cs-check">✓</span> Dedicated account manager</li>
                   <li><span className="cs-check">✓</span> Advanced analytics dashboard</li>
                 </ul>
-                <button className="cs-plan-btn cs-plan-btn-primary">Select Plan</button>
+                <button
+                  className="cs-plan-btn cs-plan-btn-primary"
+                  onClick={() => setSelectedPlan({ name: '3 Years', price: '£4,580', period: 'one-time · best value' })}
+                >Buy Plan</button>
               </div>
             </div>
 
@@ -406,6 +413,99 @@ export default function CloudStorage() {
               All prices exclude VAT. Licences are non-refundable after 14-day cooling-off period.
               Contact <strong>licensing@microsoft365.com</strong> for volume discounts.
             </p> */}
+          </div>
+        </div>
+      )}
+
+      {/* ── Payment Method Step Modal ─────────────────────────── */}
+      {selectedPlan && (
+        <div className="cs-modal-overlay cs-pay-overlay" onClick={() => setSelectedPlan(null)}>
+          <div className="cs-modal cs-pay-modal" onClick={(e) => e.stopPropagation()}>
+
+            {/* Header */}
+            <div className="cs-modal-header cs-pay-header">
+              <div className="cs-modal-header-left">
+                <button className="cs-pay-back" onClick={() => setSelectedPlan(null)}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="15 18 9 12 15 6"/>
+                  </svg>
+                </button>
+                <div>
+                  <h2 className="cs-modal-title">Complete Your Order</h2>
+                  <p className="cs-modal-subtitle">{selectedPlan.name} · {selectedPlan.price} · {selectedPlan.period}</p>
+                </div>
+              </div>
+              <button className="cs-modal-close" onClick={() => { setShowModal(false); setSelectedPlan(null); }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* Order summary strip */}
+            <div className="cs-pay-summary">
+              <div className="cs-pay-summary-row">
+                <span className="cs-pay-summary-label">Plan</span>
+                <span className="cs-pay-summary-val">Unlimited Cloud Storage — {selectedPlan.name}</span>
+              </div>
+              <div className="cs-pay-summary-row">
+                <span className="cs-pay-summary-label">Total</span>
+                <span className="cs-pay-summary-price">{selectedPlan.price} <span className="cs-pay-vat">+ VAT</span></span>
+              </div>
+            </div>
+
+            {/* Payment options */}
+            <p className="cs-pay-prompt">How would you like to proceed?</p>
+            <div className="cs-pay-options">
+
+              {/* Request Invoice */}
+              <div className="cs-pay-option">
+                <div className="cs-pay-option-icon cs-pay-option-icon-invoice">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8764b8" strokeWidth="1.8">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                </div>
+                <div className="cs-pay-option-body">
+                  <span className="cs-pay-option-title">Request Invoice</span>
+                  <span className="cs-pay-option-desc">We'll email a VAT invoice to your billing contact. Pay via bank transfer within 30 days.</span>
+                  <div className="cs-pay-option-meta">
+                    <span className="cs-pay-meta-tag">📧 Sent within 2 hours</span>
+                    <span className="cs-pay-meta-tag">🏦 Bank transfer</span>
+                  </div>
+                </div>
+                <button className="cs-pay-cta cs-pay-cta-outline">Request Invoice</button>
+              </div>
+
+              {/* Divider */}
+              <div className="cs-pay-divider"><span>or</span></div>
+
+              {/* Pay with Card */}
+              <div className="cs-pay-option">
+                <div className="cs-pay-option-icon cs-pay-option-icon-card">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0078d4" strokeWidth="1.8">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                    <line x1="1" y1="10" x2="23" y2="10"/>
+                  </svg>
+                </div>
+                <div className="cs-pay-option-body">
+                  <span className="cs-pay-option-title">Pay with Card</span>
+                  <span className="cs-pay-option-desc">Instant activation. Pay securely with Visa, Mastercard, or American Express.</span>
+                  <div className="cs-pay-option-meta">
+                    <span className="cs-pay-meta-tag">⚡ Instant activation</span>
+                    <span className="cs-pay-meta-tag">🔒 256-bit SSL</span>
+                  </div>
+                </div>
+                <button className="cs-pay-cta cs-pay-cta-primary">Pay with Card</button>
+              </div>
+            </div>
+
+            <p className="cs-modal-note" style={{ borderTop: '1px solid #f3f2f1', marginTop: 0 }}>
+              All prices exclude VAT · 14-day cooling-off period · Questions? <strong>licensing@microsoft365.com</strong>
+            </p>
           </div>
         </div>
       )}
