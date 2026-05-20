@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import API_URL from '../../config';
 import './CloudStorage.css';
 
-const TOTAL_GB = 10000; // 10 TB in GB
-const USED_GB = 9540;
-const FREE_GB = TOTAL_GB - USED_GB;
-const USED_PCT = ((USED_GB / TOTAL_GB) * 100).toFixed(1);
+const IS_UNLIMITED = true;
+const TOTAL_GB = IS_UNLIMITED ? Infinity : 10000; // 10 TB in GB
+const USED_GB = IS_UNLIMITED ? 0 : 9540;
+const FREE_GB = IS_UNLIMITED ? Infinity : TOTAL_GB - USED_GB;
+const USED_PCT = IS_UNLIMITED ? '0' : ((USED_GB / TOTAL_GB) * 100).toFixed(1);
 
 const storageItems = [
   { id: 'admin-portals', label: 'Admin Portals',  color: '#e74856', gb: 3100, description: 'Administrative systems & logs' },
@@ -19,6 +20,7 @@ const storageItems = [
 ];
 
 function formatGB(gb) {
+  if (!isFinite(gb)) return 'Unlimited';
   if (gb >= 1000) return `${(gb / 1000).toFixed(2)} TB`;
   return `${gb} GB`;
 }
@@ -63,20 +65,17 @@ export default function CloudStorage() {
         </div>
       </div>
 
-      {/* ── Critical alert banner ───────────────────────────── */}
       <div className="cs-alert-banner">
         <div className="cs-alert-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
         <div className="cs-alert-body">
-          <span className="cs-alert-title">Critical: Storage Nearly Full</span>
+          <span className="cs-alert-title">Info: Unlimited Storage</span>
           <span className="cs-alert-text">
-            Your tenant is using <strong>{USED_PCT}%</strong> of total storage capacity. Only <strong>{formatGB(FREE_GB)}</strong> remaining.
-            Immediate action required to prevent service disruption.
+            Your tenant has unlimited storage capacity. No action required.
           </span>
         </div>
-        <button className="cs-alert-cta" onClick={() => setShowModal(true)}>Buy unlimited storage</button>
-      </div>
+        )}
 
       {/* ── KPI Cards ───────────────────────────────────────── */}
       <div className="cs-kpi-row">
