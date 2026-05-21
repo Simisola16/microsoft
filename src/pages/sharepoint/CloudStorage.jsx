@@ -3,21 +3,23 @@ import API_URL from '../../config';
 import './CloudStorage.css';
 
 const IS_UNLIMITED = true;
-const TOTAL_GB = IS_UNLIMITED ? Infinity : 10000; // 10 TB in GB
-const USED_GB = IS_UNLIMITED ? 0 : 9540;
-const FREE_GB = IS_UNLIMITED ? Infinity : TOTAL_GB - USED_GB;
+const TOTAL_GB = IS_UNLIMITED ? Infinity : 10000;
+const USED_GB  = IS_UNLIMITED ? 0 : 9540;
+const FREE_GB  = IS_UNLIMITED ? Infinity : TOTAL_GB - USED_GB;
 const USED_PCT = IS_UNLIMITED ? '0' : ((USED_GB / TOTAL_GB) * 100).toFixed(1);
 
 const storageItems = [
   { id: 'admin-portals', label: 'Admin Portals',  color: '#e74856', gb: 3100, description: 'Administrative systems & logs' },
   { id: 'sharepoint',    label: 'SharePoint',     color: '#0078d4', gb: 2000, description: 'Sites, documents & libraries' },
-  { id: 'hfa-portal',   label: 'HFA-Portal',      color: '#8764b8', gb: 1500, description: 'Certification & compliance data' },
+  { id: 'hfa-portal',   label: 'HFA-Portal',     color: '#8764b8', gb: 1500, description: 'Certification & compliance data' },
   { id: 'emails',       label: 'Emails',          color: '#00b294', gb: 1100, description: 'Exchange mailboxes & archives' },
-  { id: 'certificates', label: 'Certificates',    color: '#ca5010', gb: 850,  description: 'Digital certificates & PKI data' },
+  { id: 'certificates', label: 'Certificates',   color: '#ca5010', gb: 850,  description: 'Digital certificates & PKI data' },
   { id: 'ifrs',         label: 'IFRS',            color: '#ff8c00', gb: 560,  description: 'Financial reporting datasets' },
   { id: 'logsheet',     label: 'Logsheet',        color: '#498205', gb: 300,  description: 'Operational logs & audit trails' },
   { id: 'kfc',          label: 'KFC',             color: '#d13438', gb: 130,  description: 'KFC partnership portal data' },
 ];
+
+const TOTAL_USED_GB = storageItems.reduce((s, i) => s + i.gb, 0); // 9540
 
 function formatGB(gb) {
   if (!isFinite(gb)) return 'Unlimited';
@@ -25,12 +27,18 @@ function formatGB(gb) {
   return `${gb} GB`;
 }
 
+// In unlimited mode: show % of total *used* so bars are proportional
+function pctOf(gb) {
+  if (IS_UNLIMITED) return ((gb / TOTAL_USED_GB) * 100).toFixed(2);
+  return ((gb / TOTAL_GB) * 100).toFixed(2);
+}
+
 export default function CloudStorage() {
   const [animated, setAnimated] = useState(false);
-  const [tooltip, setTooltip] = useState(null);
-  const [hovered, setHovered] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState(null); // { name, price, period }
+  const [tooltip,  setTooltip]  = useState(null);
+  const [hovered,  setHovered]  = useState(null);
+  const [showModal, setShowModal]       = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
   const barRef = useRef(null);
 
   useEffect(() => {
@@ -38,10 +46,9 @@ export default function CloudStorage() {
     return () => clearTimeout(t);
   }, []);
 
-  const pct = (gb) => ((gb / TOTAL_GB) * 100).toFixed(2);
-
   return (
     <div className="cs-page">
+
       {/* ── Page header ─────────────────────────────────────── */}
       <div className="cs-header">
         <div className="cs-header-left">
@@ -51,7 +58,10 @@ export default function CloudStorage() {
             <span className="cs-breadcrumb-current">Cloud Storage</span>
           </div>
           <h1 className="cs-title">Cloud Storage</h1>
-          <p className="cs-subtitle">SharePoint Online · Tenant storage allocation overview</p>
+          <p className="cs-subtitle">
+            SharePoint Online · Tenant storage allocation overview
+            {IS_UNLIMITED && <span className="cs-subtitle-badge">∞ Unlimited Plan</span>}
+          </p>
         </div>
         <div className="cs-header-actions">
           <button className="cs-btn cs-btn-ghost">
@@ -65,62 +75,78 @@ export default function CloudStorage() {
         </div>
       </div>
 
+      {/* ── Unlimited banner ─────────────────────────────────── */}
       {IS_UNLIMITED && (
-        <div className="cs-alert-banner">
+        <div className="cs-alert-banner cs-alert-success">
           <div className="cs-alert-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-              <line x1="12" y1="9" x2="12" y2="13"/>
-              <line x1="12" y1="17" x2="12" y2="17"/>
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
             </svg>
           </div>
           <div className="cs-alert-body">
-            <span className="cs-alert-title">Info: Unlimited Storage</span>
+            <span className="cs-alert-title">Unlimited Storage Active</span>
             <span className="cs-alert-text">
-              Your tenant now has unlimited storage capacity. No further action is required.
+              Your tenant has unrestricted storage capacity across all services. No limits apply.
             </span>
           </div>
+          <span className="cs-alert-pill">∞ Active</span>
         </div>
       )}
 
       {/* ── KPI Cards ───────────────────────────────────────── */}
       <div className="cs-kpi-row">
-        <div className="cs-kpi-card cs-kpi-danger">
-          <div className="cs-kpi-icon-wrap" style={{ background: 'rgba(231,72,86,0.12)' }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e74856" strokeWidth="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-          </div>
-          <div className="cs-kpi-info">
-            <span className="cs-kpi-value">{formatGB(USED_GB)}</span>
-            <span className="cs-kpi-label">Used Storage</span>
-          </div>
-          <span className="cs-kpi-badge cs-badge-danger">{USED_PCT}%</span>
-        </div>
 
-        <div className="cs-kpi-card cs-kpi-warning">
-          <div className="cs-kpi-icon-wrap" style={{ background: 'rgba(255,140,0,0.12)' }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        {/* Total Capacity */}
+        <div className="cs-kpi-card cs-kpi-success">
+          <div className="cs-kpi-icon-wrap" style={{ background: 'rgba(0,176,116,0.12)' }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b074" strokeWidth="2">
+              <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
+            </svg>
           </div>
           <div className="cs-kpi-info">
-            <span className="cs-kpi-value">{formatGB(FREE_GB)}</span>
-            <span className="cs-kpi-label">Available Space</span>
-          </div>
-          <span className="cs-kpi-badge cs-badge-warning">{(100 - parseFloat(USED_PCT)).toFixed(1)}%</span>
-        </div>
-
-        <div className="cs-kpi-card cs-kpi-neutral">
-          <div className="cs-kpi-icon-wrap" style={{ background: 'rgba(0,120,212,0.12)' }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0078d4" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-          </div>
-          <div className="cs-kpi-info">
-            <span className="cs-kpi-value">{formatGB(TOTAL_GB)}</span>
+            <span className="cs-kpi-value">Unlimited</span>
             <span className="cs-kpi-label">Total Capacity</span>
           </div>
-          <span className="cs-kpi-badge cs-badge-neutral">Allocated</span>
+          <span className="cs-kpi-badge cs-badge-success">∞ Active</span>
         </div>
 
+        {/* Available Space */}
+        <div className="cs-kpi-card cs-kpi-success">
+          <div className="cs-kpi-icon-wrap" style={{ background: 'rgba(0,120,212,0.12)' }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0078d4" strokeWidth="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+          </div>
+          <div className="cs-kpi-info">
+            <span className="cs-kpi-value">Unlimited</span>
+            <span className="cs-kpi-label">Available Space</span>
+          </div>
+          <span className="cs-kpi-badge cs-badge-success">No limit</span>
+        </div>
+
+        {/* Data in use */}
         <div className="cs-kpi-card cs-kpi-neutral">
           <div className="cs-kpi-icon-wrap" style={{ background: 'rgba(134,100,184,0.12)' }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8764b8" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8764b8" strokeWidth="2">
+              <rect x="2" y="2" width="20" height="20" rx="2"/>
+              <line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+          </div>
+          <div className="cs-kpi-info">
+            <span className="cs-kpi-value">{formatGB(TOTAL_USED_GB)}</span>
+            <span className="cs-kpi-label">Data In Use</span>
+          </div>
+          <span className="cs-kpi-badge cs-badge-neutral">Across services</span>
+        </div>
+
+        {/* Active Services */}
+        <div className="cs-kpi-card cs-kpi-neutral">
+          <div className="cs-kpi-icon-wrap" style={{ background: 'rgba(134,100,184,0.12)' }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8764b8" strokeWidth="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
           </div>
           <div className="cs-kpi-info">
             <span className="cs-kpi-value">{storageItems.length}</span>
@@ -136,49 +162,57 @@ export default function CloudStorage() {
         {/* Left: Stacked bar + breakdown */}
         <div className="cs-card cs-breakdown-card">
           <div className="cs-card-header">
-            <h2 className="cs-card-title">Storage Allocation Breakdown</h2>
-            <span className="cs-card-subtitle">By service · All values in GB</span>
+            <h2 className="cs-card-title">Storage Usage Breakdown</h2>
+            <span className="cs-card-subtitle">
+              {IS_UNLIMITED
+                ? 'Proportional share of current usage · No capacity ceiling'
+                : 'By service · All values in GB'}
+            </span>
           </div>
 
           {/* Segmented bar */}
           <div className="cs-seg-bar-wrap">
             <div className="cs-seg-bar" ref={barRef}>
-              {storageItems.map((item) => (
+              {storageItems.map((item, idx) => (
                 <div
                   key={item.id}
                   className="cs-seg-segment"
                   style={{
-                    width: animated ? `${pct(item.gb)}%` : '0%',
+                    width: animated ? `${pctOf(item.gb)}%` : '0%',
                     background: item.color,
-                    transitionDelay: `${storageItems.indexOf(item) * 60}ms`,
+                    transitionDelay: `${idx * 60}ms`,
                   }}
-                  onMouseEnter={(e) => {
-                    setHovered(item.id);
-                    setTooltip({ item, x: e.clientX, y: e.clientY });
-                  }}
+                  onMouseEnter={(e) => { setHovered(item.id); setTooltip({ item, x: e.clientX, y: e.clientY }); }}
                   onMouseMove={(e) => setTooltip(prev => prev ? { ...prev, x: e.clientX, y: e.clientY } : prev)}
                   onMouseLeave={() => { setHovered(null); setTooltip(null); }}
                 />
               ))}
-              {/* Free space segment */}
-              <div
-                className="cs-seg-segment cs-seg-free"
-                style={{ width: animated ? `${pct(FREE_GB)}%` : '0%' }}
-              />
             </div>
             <div className="cs-seg-labels">
-              <span>0 GB</span>
-              <span>{formatGB(TOTAL_GB / 4)}</span>
-              <span>{formatGB(TOTAL_GB / 2)}</span>
-              <span>{formatGB((TOTAL_GB * 3) / 4)}</span>
-              <span>{formatGB(TOTAL_GB)}</span>
+              {IS_UNLIMITED ? (
+                <>
+                  <span>0 GB</span>
+                  <span>{formatGB(TOTAL_USED_GB * 0.25)}</span>
+                  <span>{formatGB(TOTAL_USED_GB * 0.5)}</span>
+                  <span>{formatGB(TOTAL_USED_GB * 0.75)}</span>
+                  <span>{formatGB(TOTAL_USED_GB)} used</span>
+                </>
+              ) : (
+                <>
+                  <span>0 GB</span>
+                  <span>{formatGB(TOTAL_GB / 4)}</span>
+                  <span>{formatGB(TOTAL_GB / 2)}</span>
+                  <span>{formatGB((TOTAL_GB * 3) / 4)}</span>
+                  <span>{formatGB(TOTAL_GB)}</span>
+                </>
+              )}
             </div>
           </div>
 
           {/* Item list */}
           <div className="cs-item-list">
             {storageItems.map((item) => {
-              const itemPct = pct(item.gb);
+              const itemPct = pctOf(item.gb);
               return (
                 <div
                   key={item.id}
@@ -197,10 +231,7 @@ export default function CloudStorage() {
                     <div className="cs-item-bar-wrap">
                       <div
                         className="cs-item-bar-fill"
-                        style={{
-                          width: animated ? `${itemPct}%` : '0%',
-                          background: item.color,
-                        }}
+                        style={{ width: animated ? `${itemPct}%` : '0%', background: item.color }}
                       />
                     </div>
                     <span className="cs-item-pct">{itemPct}%</span>
@@ -210,114 +241,176 @@ export default function CloudStorage() {
               );
             })}
 
-            {/* Free row */}
-            <div className="cs-item-row cs-item-free">
-              <div className="cs-item-left">
-                <span className="cs-item-dot" style={{ background: '#d2d0ce' }} />
-                <div className="cs-item-info">
-                  <span className="cs-item-name">Free Space</span>
-                  <span className="cs-item-desc">Available for new data</span>
+            {/* Unlimited remaining row */}
+            {IS_UNLIMITED && (
+              <div className="cs-item-row cs-item-free">
+                <div className="cs-item-left">
+                  <span className="cs-item-dot" style={{ background: '#00b074' }} />
+                  <div className="cs-item-info">
+                    <span className="cs-item-name">Remaining Capacity</span>
+                    <span className="cs-item-desc">No upper limit — storage grows on demand</span>
+                  </div>
+                </div>
+                <div className="cs-item-right">
+                  <div className="cs-item-bar-wrap">
+                    <div className="cs-item-bar-fill cs-item-bar-unlimited" style={{ width: '100%' }} />
+                  </div>
+                  <span className="cs-item-pct cs-item-pct-free">∞</span>
+                  <span className="cs-item-size cs-item-size-free">Unlimited</span>
                 </div>
               </div>
-              <div className="cs-item-right">
-                <div className="cs-item-bar-wrap">
-                  <div
-                    className="cs-item-bar-fill cs-item-bar-free"
-                    style={{ width: animated ? `${pct(FREE_GB)}%` : '0%' }}
-                  />
-                </div>
-                <span className="cs-item-pct cs-item-pct-free">{(100 - parseFloat(USED_PCT)).toFixed(1)}%</span>
-                <span className="cs-item-size cs-item-size-free">{formatGB(FREE_GB)}</span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
         {/* Right: Donut + recommendations */}
         <div className="cs-right-col">
 
-          {/* Donut chart */}
+          {/* Donut / Unlimited indicator */}
           <div className="cs-card cs-donut-card">
             <div className="cs-card-header">
               <h2 className="cs-card-title">Capacity Overview</h2>
             </div>
             <div className="cs-donut-wrap">
-              <svg viewBox="0 0 200 200" className="cs-donut-svg">
-                {/* Background ring */}
-                <circle cx="100" cy="100" r="80" fill="none" stroke="#f3f2f1" strokeWidth="28" />
-                {/* Used arc */}
-                <circle
-                  cx="100" cy="100" r="80"
-                  fill="none"
-                  stroke="url(#dangerGrad)"
-                  strokeWidth="28"
-                  strokeDasharray={`${animated ? (parseFloat(USED_PCT) / 100) * 502.65 : 0} 502.65`}
-                  strokeLinecap="round"
-                  strokeDashoffset="125.66"
-                  style={{ transition: 'stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1)' }}
-                />
-                <defs>
-                  <linearGradient id="dangerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#e74856" />
-                    <stop offset="100%" stopColor="#ff6b6b" />
-                  </linearGradient>
-                </defs>
-                {/* Inner text */}
-                <text x="100" y="92" textAnchor="middle" fill="#323130" fontSize="28" fontWeight="700" fontFamily="'Segoe UI', system-ui">{USED_PCT}%</text>
-                <text x="100" y="112" textAnchor="middle" fill="#605e5c" fontSize="11" fontFamily="'Segoe UI', system-ui">Used</text>
-                <text x="100" y="128" textAnchor="middle" fill="#605e5c" fontSize="10" fontFamily="'Segoe UI', system-ui">{formatGB(USED_GB)} of {formatGB(TOTAL_GB)}</text>
-              </svg>
-              <div className="cs-donut-legend">
-                <div className="cs-legend-item">
-                  <span className="cs-legend-dot" style={{ background: '#e74856' }} />
-                  <span className="cs-legend-label">Used — {formatGB(USED_GB)}</span>
+              {IS_UNLIMITED ? (
+                <div className="cs-unlimited-circle-wrap">
+                  <svg viewBox="0 0 200 200" className="cs-donut-svg">
+                    <defs>
+                      <linearGradient id="unlimitedGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#00b074"/>
+                        <stop offset="100%" stopColor="#0078d4"/>
+                      </linearGradient>
+                    </defs>
+                    {/* Background ring */}
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="#f0faf6" strokeWidth="28"/>
+                    {/* Full green ring */}
+                    <circle
+                      cx="100" cy="100" r="80"
+                      fill="none"
+                      stroke="url(#unlimitedGrad)"
+                      strokeWidth="28"
+                      strokeDasharray={`${animated ? 502.65 : 0} 502.65`}
+                      strokeLinecap="round"
+                      strokeDashoffset="125.66"
+                      style={{ transition: 'stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1)' }}
+                    />
+                    {/* Infinity symbol */}
+                    <text x="100" y="96" textAnchor="middle" fill="#00b074" fontSize="44" fontWeight="700" fontFamily="'Segoe UI', system-ui">∞</text>
+                    <text x="100" y="116" textAnchor="middle" fill="#605e5c" fontSize="11" fontFamily="'Segoe UI', system-ui">Unlimited</text>
+                    <text x="100" y="132" textAnchor="middle" fill="#605e5c" fontSize="10" fontFamily="'Segoe UI', system-ui">No capacity limit</text>
+                  </svg>
+                  <div className="cs-donut-legend">
+                    <div className="cs-legend-item">
+                      <span className="cs-legend-dot" style={{ background: '#00b074' }}/>
+                      <span className="cs-legend-label">Capacity — Unlimited</span>
+                    </div>
+                    <div className="cs-legend-item">
+                      <span className="cs-legend-dot" style={{ background: '#8764b8' }}/>
+                      <span className="cs-legend-label">In Use — {formatGB(TOTAL_USED_GB)}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="cs-legend-item">
-                  <span className="cs-legend-dot" style={{ background: '#d2d0ce' }} />
-                  <span className="cs-legend-label">Free — {formatGB(FREE_GB)}</span>
-                </div>
-              </div>
+              ) : (
+                <svg viewBox="0 0 200 200" className="cs-donut-svg">
+                  <circle cx="100" cy="100" r="80" fill="none" stroke="#f3f2f1" strokeWidth="28"/>
+                  <circle
+                    cx="100" cy="100" r="80"
+                    fill="none" stroke="url(#dangerGrad)" strokeWidth="28"
+                    strokeDasharray={`${animated ? (parseFloat(USED_PCT) / 100) * 502.65 : 0} 502.65`}
+                    strokeLinecap="round" strokeDashoffset="125.66"
+                    style={{ transition: 'stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1)' }}
+                  />
+                  <defs>
+                    <linearGradient id="dangerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#e74856"/>
+                      <stop offset="100%" stopColor="#ff6b6b"/>
+                    </linearGradient>
+                  </defs>
+                  <text x="100" y="92" textAnchor="middle" fill="#323130" fontSize="28" fontWeight="700" fontFamily="'Segoe UI', system-ui">{USED_PCT}%</text>
+                  <text x="100" y="112" textAnchor="middle" fill="#605e5c" fontSize="11" fontFamily="'Segoe UI', system-ui">Used</text>
+                  <text x="100" y="128" textAnchor="middle" fill="#605e5c" fontSize="10" fontFamily="'Segoe UI', system-ui">{formatGB(USED_GB)} of {formatGB(TOTAL_GB)}</text>
+                </svg>
+              )}
             </div>
           </div>
 
           {/* Recommendations */}
           <div className="cs-card cs-recs-card">
             <div className="cs-card-header">
-              <h2 className="cs-card-title">Recommended Actions</h2>
+              <h2 className="cs-card-title">{IS_UNLIMITED ? 'Storage Insights' : 'Recommended Actions'}</h2>
             </div>
             <div className="cs-rec-list">
-              <div className="cs-rec-item cs-rec-critical">
-                <div className="cs-rec-icon">🚨</div>
-                <div className="cs-rec-body">
-                  <span className="cs-rec-title">Archive aged data</span>
-                  <span className="cs-rec-text">Move data older than 1 Year to cold storage</span>
-                </div>
-                <span className="cs-rec-tag cs-tag-critical">Critical</span>
-              </div>
-              <div className="cs-rec-item cs-rec-high">
-                <div className="cs-rec-icon">📦</div>
-                <div className="cs-rec-body">
-                  <span className="cs-rec-title">Expand capacity</span>
-                  <span className="cs-rec-text">Request additional storage allocation from IT admin</span>
-                </div>
-                <span className="cs-rec-tag cs-tag-high">High</span>
-              </div>
-              <div className="cs-rec-item cs-rec-medium">
-                <div className="cs-rec-icon">🔍</div>
-                <div className="cs-rec-body">
-                  <span className="cs-rec-title">Review large files</span>
-                  <span className="cs-rec-text">Identify and compress oversized documents in SharePoint</span>
-                </div>
-                <span className="cs-rec-tag cs-tag-medium">Medium</span>
-              </div>
-              <div className="cs-rec-item cs-rec-low">
-                <div className="cs-rec-icon">🗑️</div>
-                <div className="cs-rec-body">
-                  <span className="cs-rec-title">Clean recycle bins</span>
-                  <span className="cs-rec-text">Permanently delete items in site recycle bins</span>
-                </div>
-                <span className="cs-rec-tag cs-tag-low">Low</span>
-              </div>
+              {IS_UNLIMITED ? (
+                <>
+                  <div className="cs-rec-item cs-rec-low">
+                    <div className="cs-rec-icon">✅</div>
+                    <div className="cs-rec-body">
+                      <span className="cs-rec-title">Unlimited plan active</span>
+                      <span className="cs-rec-text">All services have unrestricted storage — no action required</span>
+                    </div>
+                    <span className="cs-rec-tag cs-tag-success">Active</span>
+                  </div>
+                  <div className="cs-rec-item cs-rec-low">
+                    <div className="cs-rec-icon">📊</div>
+                    <div className="cs-rec-body">
+                      <span className="cs-rec-title">Monitor usage growth</span>
+                      <span className="cs-rec-text">Track data trends to optimise performance across services</span>
+                    </div>
+                    <span className="cs-rec-tag cs-tag-low">Info</span>
+                  </div>
+                  <div className="cs-rec-item cs-rec-low">
+                    <div className="cs-rec-icon">🗂️</div>
+                    <div className="cs-rec-body">
+                      <span className="cs-rec-title">Archive aged data</span>
+                      <span className="cs-rec-text">Move data older than 3 years to cold storage for cost efficiency</span>
+                    </div>
+                    <span className="cs-rec-tag cs-tag-low">Optional</span>
+                  </div>
+                  <div className="cs-rec-item cs-rec-low">
+                    <div className="cs-rec-icon">🔒</div>
+                    <div className="cs-rec-body">
+                      <span className="cs-rec-title">Review access policies</span>
+                      <span className="cs-rec-text">Ensure data governance policies are up to date for all services</span>
+                    </div>
+                    <span className="cs-rec-tag cs-tag-low">Best practice</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="cs-rec-item cs-rec-critical">
+                    <div className="cs-rec-icon">🚨</div>
+                    <div className="cs-rec-body">
+                      <span className="cs-rec-title">Archive aged data</span>
+                      <span className="cs-rec-text">Move data older than 1 Year to cold storage</span>
+                    </div>
+                    <span className="cs-rec-tag cs-tag-critical">Critical</span>
+                  </div>
+                  <div className="cs-rec-item cs-rec-high">
+                    <div className="cs-rec-icon">📦</div>
+                    <div className="cs-rec-body">
+                      <span className="cs-rec-title">Expand capacity</span>
+                      <span className="cs-rec-text">Request additional storage allocation from IT admin</span>
+                    </div>
+                    <span className="cs-rec-tag cs-tag-high">High</span>
+                  </div>
+                  <div className="cs-rec-item cs-rec-medium">
+                    <div className="cs-rec-icon">🔍</div>
+                    <div className="cs-rec-body">
+                      <span className="cs-rec-title">Review large files</span>
+                      <span className="cs-rec-text">Identify and compress oversized documents in SharePoint</span>
+                    </div>
+                    <span className="cs-rec-tag cs-tag-medium">Medium</span>
+                  </div>
+                  <div className="cs-rec-item cs-rec-low">
+                    <div className="cs-rec-icon">🗑️</div>
+                    <div className="cs-rec-body">
+                      <span className="cs-rec-title">Clean recycle bins</span>
+                      <span className="cs-rec-text">Permanently delete items in site recycle bins</span>
+                    </div>
+                    <span className="cs-rec-tag cs-tag-low">Low</span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -325,13 +418,13 @@ export default function CloudStorage() {
 
       {/* Tooltip */}
       {tooltip && (
-        <div
-          className="cs-tooltip"
-          style={{ top: tooltip.y + 14, left: tooltip.x + 14 }}
-        >
+        <div className="cs-tooltip" style={{ top: tooltip.y + 14, left: tooltip.x + 14 }}>
           <div>
             <div className="cs-tooltip-name">{tooltip.item.label}</div>
-            <div className="cs-tooltip-val">{formatGB(tooltip.item.gb)} · {pct(tooltip.item.gb)}%</div>
+            <div className="cs-tooltip-val">
+              {formatGB(tooltip.item.gb)} · {pctOf(tooltip.item.gb)}%
+              {IS_UNLIMITED && ' of used'}
+            </div>
             <div className="cs-tooltip-desc">{tooltip.item.description}</div>
           </div>
         </div>
@@ -341,7 +434,6 @@ export default function CloudStorage() {
       {showModal && (
         <div className="cs-modal-overlay" onClick={() => { setShowModal(false); setSelectedPlan(null); }}>
           <div className="cs-modal" onClick={(e) => e.stopPropagation()}>
-            {/* Modal header */}
             <div className="cs-modal-header">
               <div className="cs-modal-header-left">
                 <div className="cs-modal-icon">
@@ -362,16 +454,11 @@ export default function CloudStorage() {
                 </svg>
               </button>
             </div>
-
-            {/* Description */}
             <p className="cs-modal-desc">
               Remove storage limits across your entire tenant. All services — SharePoint, HFA-Portal,
               Emails, and more — get unrestricted capacity with guaranteed uptime SLA.
             </p>
-
-            {/* Plans */}
             <div className="cs-plans">
-              {/* 12-month plan */}
               <div className="cs-plan cs-plan-standard">
                 <div className="cs-plan-badge">Annual</div>
                 <div className="cs-plan-name">1 Year</div>
@@ -379,7 +466,6 @@ export default function CloudStorage() {
                   <span className="cs-plan-currency">£</span>
                   <span className="cs-plan-amount">3,840</span>
                 </div>
-                {/* <div className="cs-plan-period">billed annually · £320/mo</div> */}
                 <ul className="cs-plan-features">
                   <li><span className="cs-check">✓</span> Unlimited tenant storage</li>
                   <li><span className="cs-check">✓</span> All services included</li>
@@ -391,8 +477,6 @@ export default function CloudStorage() {
                   onClick={() => setSelectedPlan({ name: '12 Months', price: '£3,840', period: 'billed annually' })}
                 >Buy Plan</button>
               </div>
-
-              {/* 3-year plan */}
               <div className="cs-plan cs-plan-pro">
                 <div className="cs-plan-badge cs-plan-badge-pro">Best Value</div>
                 <div className="cs-plan-name">3 Years</div>
@@ -400,7 +484,6 @@ export default function CloudStorage() {
                   <span className="cs-plan-currency">£</span>
                   <span className="cs-plan-amount">4,580</span>
                 </div>
-                {/* <div className="cs-plan-period">one-time · save £6,980 vs annual</div> */}
                 <ul className="cs-plan-features">
                   <li><span className="cs-check">✓</span> Unlimited tenant storage</li>
                   <li><span className="cs-check">✓</span> All services included</li>
@@ -414,11 +497,6 @@ export default function CloudStorage() {
                 >Buy Plan</button>
               </div>
             </div>
-
-            {/* <p className="cs-modal-note">
-              All prices exclude VAT. Licences are non-refundable after 14-day cooling-off period.
-              Contact <strong>licensing@microsoft365.com</strong> for volume discounts.
-            </p> */}
           </div>
         </div>
       )}
@@ -427,8 +505,6 @@ export default function CloudStorage() {
       {selectedPlan && (
         <div className="cs-modal-overlay cs-pay-overlay" onClick={() => setSelectedPlan(null)}>
           <div className="cs-modal cs-pay-modal" onClick={(e) => e.stopPropagation()}>
-
-            {/* Header */}
             <div className="cs-modal-header cs-pay-header">
               <div className="cs-modal-header-left">
                 <button className="cs-pay-back" onClick={() => setSelectedPlan(null)}>
@@ -447,8 +523,6 @@ export default function CloudStorage() {
                 </svg>
               </button>
             </div>
-
-            {/* Order summary strip */}
             <div className="cs-pay-summary">
               <div className="cs-pay-summary-row">
                 <span className="cs-pay-summary-label">Plan</span>
@@ -459,12 +533,8 @@ export default function CloudStorage() {
                 <span className="cs-pay-summary-price">{selectedPlan.price} <span className="cs-pay-vat">+ VAT</span></span>
               </div>
             </div>
-
-            {/* Payment options */}
             <p className="cs-pay-prompt">How would you like to proceed?</p>
             <div className="cs-pay-options">
-
-              {/* Download Invoice */}
               <div className="cs-pay-option">
                 <div className="cs-pay-option-icon cs-pay-option-icon-invoice">
                   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8764b8" strokeWidth="1.8">
@@ -483,23 +553,17 @@ export default function CloudStorage() {
                     <span className="cs-pay-meta-tag">🏦 Bank transfer</span>
                   </div>
                 </div>
-                <button 
+                <button
                   className="cs-pay-cta cs-pay-cta-outline"
                   onClick={() => {
-                    const invoiceFile = selectedPlan?.name === '3 Years' 
-                      ? 'E0724UC1L_storage3.pdf' 
+                    const invoiceFile = selectedPlan?.name === '3 Years'
+                      ? 'E0724UC1L_storage3.pdf'
                       : 'E0930MN6Y_storage1.pdf';
                     window.open(`${API_URL}/invoice/${invoiceFile}`, '_blank');
                   }}
-                >
-                  Download Invoice
-                </button>
+                >Download Invoice</button>
               </div>
-
-              {/* Divider */}
               <div className="cs-pay-divider"><span>or</span></div>
-
-              {/* Pay with Card */}
               <div className="cs-pay-option">
                 <div className="cs-pay-option-icon cs-pay-option-icon-card">
                   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0078d4" strokeWidth="1.8">
@@ -518,10 +582,6 @@ export default function CloudStorage() {
                 <button className="cs-pay-cta cs-pay-cta-primary">Pay with Card</button>
               </div>
             </div>
-
-            {/* <p className="cs-modal-note" style={{ borderTop: '1px solid #f3f2f1', marginTop: 0 }}>
-              All prices exclude VAT · 14-day cooling-off period · Questions? <strong>licensing@microsoft365.com</strong>
-            </p> */}
           </div>
         </div>
       )}
